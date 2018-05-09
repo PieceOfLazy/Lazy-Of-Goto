@@ -1,1 +1,2 @@
-include ':app', ':library'
+include ':app', ':lazyframework'
+project(":lazyframework").projectDir = new File('/Users/zpdl/Desktop/Eclipse/LazyOf/Lazy-Of-Framework/lazyframework')
