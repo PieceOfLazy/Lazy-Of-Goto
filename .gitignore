@@ -55,6 +55,4 @@ freeline/
 freeline_project_description.json
 /lazylibrary/
 /lazyframework/
-app/libs/
-app/src/main/kotlin/
 /.idea/
