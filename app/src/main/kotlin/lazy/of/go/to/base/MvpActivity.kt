@@ -1,11 +1,10 @@
 package lazy.of.go.to.base
 
-import android.os.Bundle
-import kotlinx.android.synthetic.main.activity_base.*
+import android.content.res.Configuration
+import android.view.ViewGroup
 import lazy.of.framework.library.mvp.MvpContract
 import lazy.of.framework.library.mvp.MvpPresenter
 import lazy.of.framework.library.mvp.MvpView
-import lazy.of.go.to.R
 import javax.inject.Inject
 
 /**
@@ -22,16 +21,14 @@ abstract class MvpActivity<V: MvpView<P>, P: MvpPresenter<V>> : BaseActivity() {
         MvpContract(view, presenter)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        onSetContentView(savedInstanceState)
-
-        contract.attach(this, activity_base_frame)
+    override fun onCreatedContentFrame(frame: ViewGroup) {
+        contract.attach(this, frame)
     }
 
-    open fun onSetContentView(savedInstanceState: Bundle?) {
-        setContentView(R.layout.activity_base)
+    override fun onConfigurationChanged(newConfig: Configuration?) {
+        super.onConfigurationChanged(newConfig)
+
+//        contract.
     }
 
     override fun onResume() {

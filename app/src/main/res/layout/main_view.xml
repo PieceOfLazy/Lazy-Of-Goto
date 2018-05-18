@@ -74,6 +74,14 @@
             app:layout_constraintTop_toBottomOf="@id/main_view_title"
             app:layout_constraintBottom_toTopOf="@id/main_view_subject">
 
+
         </LinearLayout>
     </android.support.constraint.ConstraintLayout>
 </FrameLayout>
+
+<!--<lazy.of.framework.library.widget.widget.CardImageTextView-->
+<!--style="@style/HCardImageTextDefaultView"-->
+<!--android:layout_width="240dp"-->
+<!--app:imageSrc="@drawable/googleg_standard_color_18"-->
+<!--app:text="@string/sign_in_with_anonymous"-->
+    <!--/>-->

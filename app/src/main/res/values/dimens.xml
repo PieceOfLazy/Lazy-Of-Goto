@@ -17,6 +17,7 @@
     <dimen name="dp32">32.0dp</dimen>
     <dimen name="dp36">36.0dp</dimen>
     <dimen name="dp40">40.0dp</dimen>
+    <dimen name="dp42">42.0dp</dimen>
 
     <dimen name="dp48">48.0dp</dimen>
     <dimen name="dp56">56.0dp</dimen>

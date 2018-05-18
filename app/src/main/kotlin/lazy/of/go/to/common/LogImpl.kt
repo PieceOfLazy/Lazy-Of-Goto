@@ -7,9 +7,6 @@ import javax.inject.Inject
  */
 class LogImpl @Inject constructor(tag: String?): Log {
 
-    init {
-        lazy.of.framework.library.util.Log(tag).v("Create  LogImpl")
-    }
     private val log = lazy.of.framework.library.util.Log(tag)
 
     override fun v(msg: String) {

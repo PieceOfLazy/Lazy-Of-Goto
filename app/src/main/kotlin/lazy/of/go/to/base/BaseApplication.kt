@@ -3,6 +3,7 @@ package lazy.of.go.to.base
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerApplication
 import lazy.of.framework.library.util.Log
+//import lazy.of.framework.library.util.Log
 import lazy.of.go.to.di.DaggerAppComponent
 
 class BaseApplication: DaggerApplication() {
