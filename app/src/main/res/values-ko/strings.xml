@@ -3,4 +3,5 @@
     <string name="app_corporation">Lazy Of</string>
     <string name="sign_in_with_google">구글 로그인</string>
     <string name="sign_in_with_anonymous">익명으로 로그인</string>
+    <string name="login">로그인</string>
 </resources>

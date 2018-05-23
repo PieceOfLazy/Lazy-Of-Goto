@@ -28,7 +28,7 @@ abstract class MvpActivity<V: MvpView<P>, P: MvpPresenter<V>> : BaseActivity() {
     override fun onConfigurationChanged(newConfig: Configuration?) {
         super.onConfigurationChanged(newConfig)
 
-//        contract.
+        contract.configurationChanged(newConfig)
     }
 
     override fun onResume() {

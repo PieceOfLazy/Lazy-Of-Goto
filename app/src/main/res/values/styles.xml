@@ -1,38 +1,40 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="android:Theme.Material.Light">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/type_fg</item>
-        <item name="colorPrimaryDark">@color/type_primary_20</item>
-        <item name="colorAccent">@color/type_primary_30</item>
+        <item name="android:colorPrimary">@color/type_fg</item>
+        <item name="android:colorPrimaryDark">@color/type_fg_main</item>
+        <item name="android:colorAccent">@color/type_primary_30</item>
+        <item name="android:textColorPrimary">@color/type_fg_main</item>
+        <item name="android:navigationBarColor">@color/type_fg_main</item>
         <item name="android:windowBackground">@color/type_bg</item>
     </style>
 
     <style name="AppThemeNoActionBar" parent="AppTheme">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+        <item name="android:windowActionBarOverlay">false</item>
+        <item name="android:windowNoTitle">true</item>
     </style>
 
-    <!--<style name="HCardImageTextView" parent="CardView">-->
-        <!--<item name="cardBackgroundColor">@color/type_fg</item>-->
-        <!--<item name="cardCornerRadius">2dp</item>-->
-        <!--<item name="cardElevation">4dp</item>-->
-        <!--<item name="backgroundCard">@drawable/ripple_primary_10</item>-->
-        <!--<item name="orientation">horizontal</item>-->
-        <!--<item name="layoutStyle">fill_text</item>-->
-    <!--</style>-->
+    <style name="HCardImageTextView" parent="CardView">
+        <item name="cardBackgroundColor">@color/type_fg</item>
+        <item name="cardCornerRadius">2dp</item>
+        <item name="cardElevation">4dp</item>
+        <item name="backgroundCard">@drawable/ripple_primary_10</item>
+        <item name="orientation">horizontal</item>
+        <item name="layoutStyle">fill_text</item>
+    </style>
 
-    <!--<style name="HCardImageTextDefaultView" parent="HCardImageTextView">-->
-        <!--<item name="android:layout_width">match_parent</item>-->
-        <!--<item name="android:layout_height">@dimen/dp42</item>-->
-        <!--<item name="paddingStart">@dimen/dp16</item>-->
-        <!--<item name="paddingEnd">@dimen/dp16</item>-->
-        <!--<item name="imageWidth">@dimen/dp32</item>-->
-        <!--<item name="imageHeight">@dimen/dp32</item>-->
-        <!--<item name="textSize">@dimen/dp14</item>-->
-        <!--<item name="textColor">@color/type_fg_main</item>-->
-        <!--<item name="textStyle">normal</item>-->
-    <!--</style>-->
+    <style name="HCardImageTextDefaultView" parent="HCardImageTextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/dp42</item>
+        <item name="paddingStart">@dimen/dp16</item>
+        <item name="paddingEnd">@dimen/dp16</item>
+        <item name="imageWidth">@dimen/dp28</item>
+        <item name="imageHeight">@dimen/dp28</item>
+        <item name="textSize">@dimen/dp14</item>
+        <item name="textColor">@color/type_fg_main</item>
+        <item name="textStyle">normal</item>
+    </style>
 
 </resources>

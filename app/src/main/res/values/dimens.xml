@@ -22,4 +22,6 @@
     <dimen name="dp48">48.0dp</dimen>
     <dimen name="dp56">56.0dp</dimen>
     <dimen name="dp64">64.0dp</dimen>
+
+    <dimen name="dp240">240.0dp</dimen>
 </resources>

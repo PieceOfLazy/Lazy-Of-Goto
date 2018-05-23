@@ -1,10 +1,10 @@
 package lazy.of.go.to.base
 
-import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Message
 import android.view.ViewGroup
 import android.widget.Toast
+import dagger.android.DaggerActivity
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_base.*
 import lazy.of.go.to.R
@@ -20,7 +20,7 @@ import kotlin.reflect.KClass
  * @author lazy.of.zpdl
  */
 abstract class BaseActivity :
-        DaggerAppCompatActivity(),
+        DaggerActivity(),
         WeakRefHandler.HandleMessage,
         FeatureListener,
         LoadingFeature,

@@ -2,8 +2,10 @@ package lazy.of.go.to.di;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
-import lazy.of.go.to.app.MainActivity;
-import lazy.of.go.to.module.MainModule;
+import lazy.of.go.to.app.splash.SplashActivity;
+import lazy.of.go.to.app.login.LoginActivity;
+import lazy.of.go.to.module.splash.SplashModule;
+import lazy.of.go.to.module.login.LoginModule;
 
 
 /**
@@ -17,7 +19,11 @@ import lazy.of.go.to.module.MainModule;
 abstract class ActivityBindingBuilder {
 
     @ActivityScoped
-    @ContributesAndroidInjector(modules = MainModule.class)
-    abstract MainActivity bindMainActivity();
+    @ContributesAndroidInjector(modules = SplashModule.class)
+    abstract SplashActivity bindSplashActivity();
+
+    @ActivityScoped
+    @ContributesAndroidInjector(modules = LoginModule.class)
+    abstract LoginActivity bindLoginActivity();
 
 }

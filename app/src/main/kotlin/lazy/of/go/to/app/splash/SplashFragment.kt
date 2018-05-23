@@ -1,31 +1,45 @@
-package lazy.of.go.to.app
+package lazy.of.go.to.app.splash
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
-import kotlinx.android.synthetic.main.main_view.*
+import kotlinx.android.synthetic.main.splash_view.*
 import lazy.of.go.to.R
 import lazy.of.go.to.base.MvpFragment
 import lazy.of.go.to.di.ActivityScoped
-import lazy.of.go.to.di.FragmentScoped
 import javax.inject.Inject
 
 /**
- * Created by piece.of.lazy
+ * @author lazy.of.zpdl
  */
 @ActivityScoped
-class MainFragment @Inject constructor(): MvpFragment<MainContract.View, MainContract.Presenter>(), MainContract.View {
+class SplashFragment @Inject constructor(): MvpFragment<SplashContract.View, SplashContract.Presenter>(), SplashContract.View {
 
-    override fun onBindPresenterView(): MainContract.View = this
+    interface OnFragmentListener {
+        fun onLogin()
+        fun onMain()
+    }
+    private var listener: OnFragmentListener? = null
+
+    override fun onBindPresenterView(): SplashContract.View = this
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+
+        if(context is OnFragmentListener) {
+            listener = context
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (view == null) {
             inflater?.let {
-                return it.inflate(R.layout.main_view, container, false)
+                return it.inflate(R.layout.splash_view, container, false)
             }
             return super.onCreateView(inflater, container, savedInstanceState)
         }
@@ -39,11 +53,17 @@ class MainFragment @Inject constructor(): MvpFragment<MainContract.View, MainCon
     override fun onResume() {
         super.onResume()
 
-        getPresenter()?.onLaunch()
+        _presenter?.onLaunch()
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+
+        listener = null
     }
 
     override fun onLaunch() {
-        main_view_content
+        splash_view_content
                 .animate()
                 .withLayer()
                 .alpha(1.0f)
@@ -51,9 +71,17 @@ class MainFragment @Inject constructor(): MvpFragment<MainContract.View, MainCon
                 .setDuration(1000)
                 .setListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(p0: Animator?) {
-
+                        _presenter?.onAnimationEnd()
                     }
                 })
                 .start()
+    }
+
+    override fun onFinish(isLogin: Boolean) {
+        if(isLogin) {
+            listener?.onMain()
+        } else {
+            listener?.onLogin()
+        }
     }
 }
