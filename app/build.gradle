@@ -60,6 +60,7 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:2.13"
     // Firebase
     implementation 'com.google.firebase:firebase-auth:15.1.0'
+    implementation 'com.google.firebase:firebase-firestore:16.0.0'
     implementation 'com.google.android.gms:play-services-auth:15.0.1'
 }
 

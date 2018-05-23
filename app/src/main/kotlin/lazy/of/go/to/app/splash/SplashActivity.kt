@@ -2,6 +2,7 @@ package lazy.of.go.to.app.splash
 
 import android.content.Intent
 import lazy.of.go.to.app.login.LoginActivity
+import lazy.of.go.to.app.main.MainActivity
 import lazy.of.go.to.base.MvpActivity
 
 class SplashActivity: MvpActivity<SplashFragment, SplashContract.Presenter>(), SplashFragment.OnFragmentListener {
@@ -14,7 +15,10 @@ class SplashActivity: MvpActivity<SplashFragment, SplashContract.Presenter>(), S
     }
 
     override fun onMain() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+
+        finish()
     }
 
 }

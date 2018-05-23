@@ -35,6 +35,15 @@ class SplashPresenter @Inject constructor(private val log: Log, private val auth
             user = auth.currentUser()
             view?.onLaunch()
         }
+
+        user?.let {
+            log.d("USER : uuid : ${it.uuid}")
+            log.d("USER : email : ${it.email}")
+            log.d("USER : emailVerified : ${it.emailVerified}")
+            log.d("USER : phoneNumber : ${it.phoneNumber}")
+            log.d("USER : displayName : ${it.displayName}")
+            log.d("USER : photoURL : ${it.photoURL}")
+        }
     }
 
     override fun onAnimationEnd() {
