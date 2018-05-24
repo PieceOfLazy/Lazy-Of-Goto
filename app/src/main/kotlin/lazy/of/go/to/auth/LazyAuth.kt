@@ -5,4 +5,6 @@ package lazy.of.go.to.auth
  */
 interface LazyAuth {
     fun currentUser(): LazyUser?
+
+    fun signOut()
 }

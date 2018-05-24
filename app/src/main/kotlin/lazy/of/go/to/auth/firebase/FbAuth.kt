@@ -9,6 +9,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import lazy.of.go.to.R
@@ -23,6 +24,7 @@ import javax.inject.Singleton
  */
 @Singleton
 class FbAuth @Inject constructor() : LazyAuth {
+
     init {
         Log.d("Lazy:","Create FbAuth")
     }
@@ -35,6 +37,10 @@ class FbAuth @Inject constructor() : LazyAuth {
             return FbUser(it)
         }
         return null
+    }
+
+    override fun signOut() {
+        auth.signOut()
     }
 
     fun signInActivityResult(activity: Activity, requestCode: Int, resultCode: Int, data: Intent?, listener: OnFbAuthCompleteListener): Boolean {
@@ -76,6 +82,18 @@ class FbAuth @Inject constructor() : LazyAuth {
             activity.startActivityForResult(signInIntent,
                     ActivityRequestCode.AUTH_GOOGLE_SIGN_IN.ordinal)
         }
+    }
+
+    fun signInAnonymously(activity: Activity, listener: OnFbAuthCompleteListener) {
+        listener.onStart()
+
+        auth.signInAnonymously().addOnCompleteListener(activity, {
+            if( it.isSuccessful) {
+                listener.onComplete(true, currentUser())
+            } else {
+                listener.onComplete(true, null)
+            }
+        })
     }
 
     private fun authWithGoogle(acct: GoogleSignInAccount, activity: Activity, listener: OnFbAuthCompleteListener) {

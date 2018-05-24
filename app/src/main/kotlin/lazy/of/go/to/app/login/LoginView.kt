@@ -12,6 +12,7 @@ class LoginView constructor(private val log: Log, private val listener: OnPanelL
 
     interface OnPanelListener: FeatureListener {
         fun onGoogleLogin()
+        fun onAnonymouslyLogin()
     }
 
     override fun onBindLayoutContainer(context: Context, layoutContainer: PanelLayoutContainer) {
@@ -19,7 +20,7 @@ class LoginView constructor(private val log: Log, private val listener: OnPanelL
             listener.onGoogleLogin()
         })
         layoutContainer.login_view_anonymous.setOnClickListener({
-
+            listener.onAnonymouslyLogin()
         })
     }
 
