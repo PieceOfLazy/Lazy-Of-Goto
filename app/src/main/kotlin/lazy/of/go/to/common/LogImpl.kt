@@ -9,12 +9,12 @@ class LogImpl @Inject constructor(tag: String?): Log {
 
     private val log = lazy.of.framework.library.util.Log(tag)
 
-    override fun v(msg: String) {
-        log.v(msg)
-    }
-
     override fun d(msg: String) {
         log.d(msg)
+    }
+
+    override fun i(msg: String) {
+        log.i(msg)
     }
 
     override fun e(msg: String) {

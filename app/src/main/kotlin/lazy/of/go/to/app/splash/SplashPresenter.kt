@@ -3,6 +3,11 @@ package lazy.of.go.to.app.splash
 import lazy.of.go.to.auth.LazyAuth
 import lazy.of.go.to.auth.LazyUser
 import lazy.of.go.to.common.Log
+import lazy.of.go.to.db.DbMng
+import lazy.of.go.to.db.DbUser
+import lazy.of.go.to.db.OnDbListener
+import lazy.of.go.to.db.data.User
+import lazy.of.go.to.db.firebase.FbDbUser
 import lazy.of.go.to.di.ActivityScoped
 import javax.inject.Inject
 
@@ -10,9 +15,17 @@ import javax.inject.Inject
  * @author lazy.of.zpdl
  */
 @ActivityScoped
-class SplashPresenter @Inject constructor(private val log: Log, private val auth: LazyAuth): SplashContract.Presenter {
-    init {
-        log.d("Create MainPresenter")
+class SplashPresenter @Inject constructor(): SplashContract.Presenter {
+
+    @Inject
+    lateinit var log: Log
+    @Inject
+    lateinit var auth: LazyAuth
+    @Inject
+    lateinit var dbMng: DbMng
+
+    private val dbUser: DbUser by lazy {
+        dbMng.getDB(DbUser::class)
     }
 
     private var view: SplashContract.View? = null
@@ -43,7 +56,22 @@ class SplashPresenter @Inject constructor(private val log: Log, private val auth
             log.d("USER : phoneNumber : ${it.phoneNumber}")
             log.d("USER : displayName : ${it.displayName}")
             log.d("USER : photoURL : ${it.photoURL}")
+            dbUser.getUser()
+            dbUser.setUser(User(
+                    it.displayName ?: "",
+                    it.email ?: "",
+                    it.photoURL?.toString() ?: ""),
+                    object : OnDbListener<User> {
+                        override fun onSuccess(data: User) {
+                            log.d("fbDbUser.setUser onSuccess $data")
+                        }
+                        override fun onFail(code: Int) {
+                            log.d("fbDbUser.setUser onFail $code")
+                        }
+            })
         }
+
+
     }
 
     override fun onAnimationEnd() {

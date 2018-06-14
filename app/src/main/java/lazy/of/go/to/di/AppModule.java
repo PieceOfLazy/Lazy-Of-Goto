@@ -11,6 +11,10 @@ import lazy.of.go.to.auth.LazyAuth;
 import lazy.of.go.to.auth.firebase.FbAuth;
 import lazy.of.go.to.common.LocalPreferences;
 import lazy.of.go.to.common.impl.SharedPreferences;
+import lazy.of.go.to.db.DbMng;
+import lazy.of.go.to.db.firebase.FbDbMng;
+import lazy.of.go.to.rx.schedulers.SchedulerProvider;
+import lazy.of.go.to.rx.schedulers.android.AndroidSchedulerProvider;
 
 /**
  * This is a Dagger module. We use this to bind our Application class as a Context in the AppComponent
@@ -34,4 +38,12 @@ abstract class AppModule {
     @Singleton
     @Binds
     abstract LazyAuth bindLazyAuth(FbAuth auth);
+
+    @Singleton
+    @Binds
+    abstract SchedulerProvider bindSchedulerProvider(AndroidSchedulerProvider schedulerProvider);
+
+    @Singleton
+    @Binds
+    abstract DbMng bindDbMng(FbDbMng fbDbMng);
 }

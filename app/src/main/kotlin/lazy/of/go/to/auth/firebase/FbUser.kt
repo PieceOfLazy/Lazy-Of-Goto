@@ -26,5 +26,11 @@ class FbUser(private val user: FirebaseUser): LazyUser {
     override val photoURL: Uri?
         get() = user.photoUrl
 
+    override val isAnonymous: Boolean
+        get() = user.isAnonymous
+
+    override val providerId: String
+        get() = user.providerId
+
     fun getUser(): FirebaseUser = user
 }

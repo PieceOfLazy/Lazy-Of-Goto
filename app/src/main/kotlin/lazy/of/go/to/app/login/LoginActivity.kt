@@ -11,6 +11,9 @@ import lazy.of.go.to.base.BaseActivity
 import lazy.of.go.to.common.LocalPreferences
 import javax.inject.Inject
 import kotlin.reflect.KClass
+import android.content.ComponentName
+
+
 
 class LoginActivity: BaseActivity() {
 
@@ -94,7 +97,6 @@ class LoginActivity: BaseActivity() {
                     startActivity(intent)
                 }
             }
-
         })
     }
 }

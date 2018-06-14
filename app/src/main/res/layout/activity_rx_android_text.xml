@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/type_bg">
+
+    <LinearLayout
+        android:id="@+id/login_view_contents"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <lazy.of.framework.library.widget.widget.CardImageTextView
+            android:id="@+id/activity_setting_fragment_logout"
+            style="@style/HCardImageTextDefaultView"
+            android:layout_width="@dimen/dp240"
+            android:layout_marginTop="@dimen/dp08"
+            android:layout_marginBottom="@dimen/dp08"
+            app:text="RX ANDROID TEST" />
+
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

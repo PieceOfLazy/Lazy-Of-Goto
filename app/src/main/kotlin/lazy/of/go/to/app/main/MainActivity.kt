@@ -37,6 +37,8 @@ class MainActivity: MvpActivity<MainFragment, MainContract.Presenter>(), MainFra
             R.id.menu_main_setting -> {
                 val intent = Intent(this, SettingActivity::class.java)
                 startActivity(intent)
+//                val intent = Intent(this, RxTestActivity::class.java)
+//                startActivity(intent)
                 true
             }
             else -> {

@@ -19,4 +19,7 @@ interface LazyUser {
 
     val photoURL: Uri?
 
+    val isAnonymous: Boolean
+
+    val providerId: String
 }

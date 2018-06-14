@@ -34,6 +34,9 @@ class FbAuth @Inject constructor() : LazyAuth {
 
     override fun currentUser(): LazyUser? {
         auth.currentUser?.let {
+            Log.d("Lazy:","auth.currentUser : it.isAnonymous : "+it.isAnonymous)
+            Log.d("Lazy:","auth.currentUser : it.providerId : "+it.providerId)
+            Log.d("Lazy:","auth.currentUser : it.providers.toString() : "+it.providers.toString())
             return FbUser(it)
         }
         return null
