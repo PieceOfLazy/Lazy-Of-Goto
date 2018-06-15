@@ -9,10 +9,12 @@ import lazy.of.go.to.auth.LazyUser
 import lazy.of.go.to.auth.firebase.FbAuth
 import lazy.of.go.to.base.BaseActivity
 import lazy.of.go.to.common.LocalPreferences
+import lazy.of.go.to.db.DbMng
+import lazy.of.go.to.db.DbUser
+import lazy.of.go.to.db.OnDbListener
+import lazy.of.go.to.db.data.User
 import javax.inject.Inject
 import kotlin.reflect.KClass
-import android.content.ComponentName
-
 
 
 class LoginActivity: BaseActivity() {
@@ -21,6 +23,8 @@ class LoginActivity: BaseActivity() {
     lateinit var auth: FbAuth
     @Inject
     lateinit var localPreferences: LocalPreferences
+    @Inject
+    lateinit var dbMng: DbMng
 
     private var view: LoginView? = LoginView(log, object : LoginView.OnPanelListener {
         override fun onAnonymouslyLogin() {
@@ -51,14 +55,11 @@ class LoginActivity: BaseActivity() {
             }
 
             override fun onComplete(Immediately: Boolean, user: LazyUser?) {
-                loadingEnd()
                 if(user == null) {
+                    loadingEnd()
                     showToast("로그인에 실패하였습니다.")
                 } else {
-                    showToast("로그인에 성공하였습니다.")
-
-                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                    startActivity(intent)
+                    setUser(user)
                 }
             }
         })
@@ -71,21 +72,10 @@ class LoginActivity: BaseActivity() {
             }
 
             override fun onComplete(Immediately: Boolean, user: LazyUser?) {
-                loadingEnd()
                 if(user == null) {
+                    loadingEnd()
                     showToast("로그인에 실패하였습니다.")
                 } else {
-                    showToast("로그인에 성공하였습니다.")
-
-                    user.let {
-                        log.d("anonymouslyLogin : uuid : ${it.uuid}")
-                        log.d("anonymouslyLogin : email : ${it.email}")
-                        log.d("anonymouslyLogin : emailVerified : ${it.emailVerified}")
-                        log.d("anonymouslyLogin : phoneNumber : ${it.phoneNumber}")
-                        log.d("anonymouslyLogin : displayName : ${it.displayName}")
-                        log.d("anonymouslyLogin : photoURL : ${it.photoURL}")
-                    }
-
                     var anonymouslyUUID = localPreferences.getValue(LocalPreferences.KEY_AUTH_ANONYMOUSLY, "")
                     if(TextUtils.isEmpty(anonymouslyUUID)) {
                         anonymouslyUUID = user.uuid
@@ -93,10 +83,33 @@ class LoginActivity: BaseActivity() {
                     }
                     localPreferences.setValue(LocalPreferences.KEY_USER_UUID, anonymouslyUUID)
 
-                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                    startActivity(intent)
+                    setUser(user)
                 }
             }
         })
+    }
+
+    private fun setUser(user: LazyUser) {
+        dbMng.getDB(DbUser::class).setUser(
+                User(
+                        user.isAnonymous,
+                        user.providerId,
+                        user.displayName ?: "",
+                        user.email ?: "",
+                        user.photoURL?.toString() ?: ""),
+                object : OnDbListener<User> {
+                    override fun onSuccess(data: User) {
+                        loadingEnd()
+                        showToast("로그인에 성공하였습니다.")
+
+                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                        startActivity(intent)
+                    }
+
+                    override fun onFail(code: Int) {
+                        loadingEnd()
+                        showToast("로그인에 실패하였습니다.")
+                    }
+                })
     }
 }

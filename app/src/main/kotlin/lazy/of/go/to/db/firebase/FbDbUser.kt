@@ -1,6 +1,7 @@
 package lazy.of.go.to.db.firebase
 
 import com.google.firebase.firestore.FirebaseFirestore
+import lazy.of.framework.library.util.Log
 import lazy.of.go.to.db.DbUser
 import lazy.of.go.to.db.OnDbListener
 import lazy.of.go.to.db.data.User
@@ -14,6 +15,7 @@ class FbDbUser constructor(private val db: FirebaseFirestore, private val listen
     private var _user: User? = null
 
     override fun setUser(user: User, listener: OnDbListener<User>) {
+        Log.i("Lazy", "this.listener.getUserUUID() : "+this.listener.getUserUUID())
         val docRef = db.collection("User").document(this.listener.getUserUUID())
         docRef
                 .set(user)
@@ -21,6 +23,7 @@ class FbDbUser constructor(private val db: FirebaseFirestore, private val listen
                     getUser(listener)
                 }
                 .addOnFailureListener {
+                    it.printStackTrace()
                     listener.onFail(0)
                 }
     }
