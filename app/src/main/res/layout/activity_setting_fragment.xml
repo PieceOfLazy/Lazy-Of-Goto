@@ -24,5 +24,12 @@
             android:layout_marginBottom="@dimen/dp08"
             app:text="Logout" />
 
+        <lazy.of.framework.library.widget.widget.CardImageTextView
+            android:id="@+id/activity_setting_fragment_crash"
+            style="@style/HCardImageTextDefaultView"
+            android:layout_width="@dimen/dp240"
+            android:layout_marginTop="@dimen/dp08"
+            android:layout_marginBottom="@dimen/dp08"
+            app:text="Crash" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

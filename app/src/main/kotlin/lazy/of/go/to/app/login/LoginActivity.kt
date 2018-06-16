@@ -9,7 +9,6 @@ import lazy.of.go.to.auth.LazyUser
 import lazy.of.go.to.auth.firebase.FbAuth
 import lazy.of.go.to.base.BaseActivity
 import lazy.of.go.to.common.LocalPreferences
-import lazy.of.go.to.db.DbInjection
 import lazy.of.go.to.db.DbUser
 import lazy.of.go.to.db.data.User
 import javax.inject.Inject
@@ -101,7 +100,8 @@ class LoginActivity: BaseActivity() {
             showToast("로그인에 성공하였습니다.")
 
             val intent = Intent(this@LoginActivity, MainActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(intent)
         }, {
             loadingEnd()

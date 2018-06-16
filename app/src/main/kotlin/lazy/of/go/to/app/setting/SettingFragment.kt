@@ -48,6 +48,9 @@ class SettingFragment @Inject constructor(): MvpFragment<SettingContract.View, S
         activity_setting_fragment_logout.setOnClickListener({
             _presenter?.logout()
         })
+        activity_setting_fragment_crash.setOnClickListener({
+            throw RuntimeException("This is a crash")
+        })
     }
 
     override fun onResume() {
