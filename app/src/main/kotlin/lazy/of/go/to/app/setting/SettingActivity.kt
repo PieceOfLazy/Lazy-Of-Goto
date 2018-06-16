@@ -17,7 +17,9 @@ class SettingActivity: MvpActivity<SettingFragment, SettingContract.Presenter>()
 
     override fun onLogout() {
         val intent = Intent(this, LoginActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+
         startActivity(intent)
     }
 }

@@ -3,7 +3,6 @@ package lazy.of.go.to.app.splash
 import io.reactivex.disposables.Disposable
 import lazy.of.go.to.auth.LazyAuth
 import lazy.of.go.to.common.Log
-import lazy.of.go.to.db.DbInjection
 import lazy.of.go.to.db.DbUser
 import lazy.of.go.to.db.data.User
 import lazy.of.go.to.di.ActivityScoped
@@ -20,11 +19,7 @@ class SplashPresenter @Inject constructor(): SplashContract.Presenter {
     @Inject
     lateinit var auth: LazyAuth
     @Inject
-    lateinit var dbInjection: DbInjection
-
-    private val dbUser: DbUser by lazy {
-        dbInjection.getDB(DbUser::class)
-    }
+    lateinit var dbUser: DbUser
 
     private var view: SplashContract.View? = null
     private var launch = false

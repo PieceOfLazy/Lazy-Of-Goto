@@ -5,6 +5,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.android.ContributesAndroidInjector
 import lazy.of.go.to.common.Log
+import lazy.of.go.to.db.DbInjection
+import lazy.of.go.to.db.DbUser
 import lazy.of.go.to.di.ActivityScoped
 import lazy.of.go.to.di.FragmentScoped
 
@@ -27,5 +29,10 @@ abstract class SplashModule {
         @ActivityScoped
         @Provides
         internal fun provideLog(activity: SplashActivity): Log = activity.log
+
+        @JvmStatic
+        @ActivityScoped
+        @Provides
+        internal fun provideDbUser(dbInjection: DbInjection) = dbInjection.getDB(DbUser::class)
     }
 }
