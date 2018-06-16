@@ -4,15 +4,11 @@ import android.content.Intent
 import android.text.TextUtils
 import android.view.ViewGroup
 import lazy.of.go.to.R
-import lazy.of.go.to.app.main.MainActivity
 import lazy.of.go.to.auth.LazyUser
 import lazy.of.go.to.auth.firebase.FbAuth
 import lazy.of.go.to.base.BaseActivity
 import lazy.of.go.to.common.LocalPreferences
-import lazy.of.go.to.db.DbMng
-import lazy.of.go.to.db.DbUser
-import lazy.of.go.to.db.OnDbListener
-import lazy.of.go.to.db.data.User
+import lazy.of.go.to.db.DbInjection
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
@@ -24,7 +20,7 @@ class LoginActivity: BaseActivity() {
     @Inject
     lateinit var localPreferences: LocalPreferences
     @Inject
-    lateinit var dbMng: DbMng
+    lateinit var dbInjection: DbInjection
 
     private var view: LoginView? = LoginView(log, object : LoginView.OnPanelListener {
         override fun onAnonymouslyLogin() {
