@@ -90,26 +90,26 @@ class LoginActivity: BaseActivity() {
     }
 
     private fun setUser(user: LazyUser) {
-        dbMng.getDB(DbUser::class).setUser(
-                User(
-                        user.isAnonymous,
-                        user.providerId,
-                        user.displayName ?: "",
-                        user.email ?: "",
-                        user.photoURL?.toString() ?: ""),
-                object : OnDbListener<User> {
-                    override fun onSuccess(data: User) {
-                        loadingEnd()
-                        showToast("로그인에 성공하였습니다.")
-
-                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                        startActivity(intent)
-                    }
-
-                    override fun onFail(code: Int) {
-                        loadingEnd()
-                        showToast("로그인에 실패하였습니다.")
-                    }
-                })
+//        dbMng.getDB(DbUser::class).setUser(
+//                User(
+//                        user.isAnonymous,
+//                        user.providerId,
+//                        user.displayName ?: "",
+//                        user.email ?: "",
+//                        user.photoURL?.toString() ?: ""),
+//                object : OnDbListener<User> {
+//                    override fun onSuccess(data: User) {
+//                        loadingEnd()
+//                        showToast("로그인에 성공하였습니다.")
+//
+//                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+//                        startActivity(intent)
+//                    }
+//
+//                    override fun onFail(code: Int) {
+//                        loadingEnd()
+//                        showToast("로그인에 실패하였습니다.")
+//                    }
+//                })
     }
 }

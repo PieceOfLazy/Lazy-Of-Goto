@@ -1,6 +1,7 @@
 package lazy.of.go.to.db.firebase
 
 import com.google.firebase.firestore.FirebaseFirestore
+import io.reactivex.Observable
 import lazy.of.framework.library.util.Log
 import lazy.of.go.to.db.DbUser
 import lazy.of.go.to.db.OnDbListener
@@ -14,37 +15,51 @@ class FbDbUser constructor(private val db: FirebaseFirestore, private val listen
 
     private var _user: User? = null
 
-    override fun setUser(user: User, listener: OnDbListener<User>) {
-        Log.i("Lazy", "this.listener.getUserUUID() : "+this.listener.getUserUUID())
-        val docRef = db.collection("User").document(this.listener.getUserUUID())
-        docRef
-                .set(user)
-                .addOnSuccessListener {
-                    getUser(listener)
+    override fun observableSetUser(user: User): Observable<Unit> {
+        return Observable.create({ emit ->
+            db.collection("User").document(this.listener.getUserUUID())
+                    .set(user)
+                    .addOnSuccessListener {
+                        _user = user
+                        emit.onNext(Unit)
+                        emit.onComplete()
+                    }
+                    .addOnFailureListener {
+                        _user = null
+                        emit.onError(it)
+                    }
+        })
+    }
+
+    override fun observableGetUser(user: User): Observable<User> {
+        return observableSetUser(user)
+                .flatMap {
+                    observableGetUser()
                 }
-                .addOnFailureListener {
-                    it.printStackTrace()
-                    listener.onFail(0)
-                }
+    }
+
+    override fun observableGetUser(): Observable<User> {
+        return Observable.create({ emit ->
+            db.collection("User").document(this.listener.getUserUUID())
+                    .get()
+                    .addOnSuccessListener {
+                        it.toObject(User::class.java)?.let {
+                            _user = it
+                            emit.onNext(it)
+                            emit.onComplete()
+                        } ?: run {
+                            _user = null
+                            emit.onError(Exception("User is null"))
+                        }
+                    }
+                    .addOnFailureListener {
+                        _user = null
+                        emit.onError(it)
+                    }
+        })
     }
 
     override fun getUser(): User {
         return _user ?: User()
-    }
-
-    override fun getUser(listener: OnDbListener<User>) {
-        val docRef = db.collection("User").document(this.listener.getUserUUID())
-        docRef.get()
-                .addOnSuccessListener {
-                    val data = it.toObject(User::class.java)
-                    data?.let {
-                        listener.onSuccess(data)
-                    } ?: run {
-                        listener.onFail(0)
-                    }
-                }
-                .addOnFailureListener {
-                    listener.onFail(0)
-                }
     }
 }

@@ -1,13 +1,10 @@
 package lazy.of.go.to.app.splash
 
-import io.reactivex.Observable
-import io.reactivex.ObservableOnSubscribe
 import io.reactivex.disposables.Disposable
 import lazy.of.go.to.auth.LazyAuth
 import lazy.of.go.to.common.Log
 import lazy.of.go.to.db.DbMng
 import lazy.of.go.to.db.DbUser
-import lazy.of.go.to.db.OnDbListener
 import lazy.of.go.to.db.data.User
 import lazy.of.go.to.di.ActivityScoped
 import javax.inject.Inject
@@ -52,43 +49,71 @@ class SplashPresenter @Inject constructor(): SplashContract.Presenter {
         if(!launch) {
             launch = true
             auth.currentUser()?.let {
-                observable = Observable.create(ObservableOnSubscribe<User> { emit ->
-                    dbUser.setUser(User(
-                            it.isAnonymous,
-                            it.providerId,
-                            it.displayName ?: "",
-                            it.email ?: "",
-                            it.photoURL?.toString() ?: ""),
-                            object : OnDbListener<User> {
-                                override fun onSuccess(data: User) {
-                                    emit.onNext(data)
-                                    emit.onComplete()
-                                    log.d("fbDbUser.setUser onSuccess $data")
-
-                                }
-
-                                override fun onFail(code: Int) {
-                                    emit.onError(Exception("Time out"))
-                                    log.d("fbDbUser.setUser onFail $code")
-                                }
-                            })
-                }).subscribe({
+                observable = dbUser.observableGetUser(User(
+                        it.isAnonymous,
+                        it.providerId,
+                        it.displayName ?: "",
+                        it.email ?: "",
+                        it.photoURL?.toString() ?: ""
+                )).subscribe({
                     this@SplashPresenter.user = it
                     taskOffDbUser = true
                     taskOff()
 
                     observable?.let {
-                        log.d("USER : observable isDisposed 2 : ${it.isDisposed}")
+                        log.d("USER : subscribe onNext : ${it.isDisposed}")
                     }
                 }, {
                     this@SplashPresenter.user = null
                     taskOffDbUser = true
                     taskOff()
+
+                    observable?.let {
+                        log.d("USER : subscribe onError : ${it.isDisposed}")
+                    }
                 }, {
                     observable?.let {
-                        log.d("USER : observable complete 2 : ${it.isDisposed}")
+                        log.d("USER : observable onComplete : ${it.isDisposed}")
                     }
                 })
+
+//                observable = Observable.create(ObservableOnSubscribe<User> { emit ->
+//                    dbUser.setUser(User(
+//                            it.isAnonymous,
+//                            it.providerId,
+//                            it.displayName ?: "",
+//                            it.email ?: "",
+//                            it.photoURL?.toString() ?: ""),
+//                            object : OnDbListener<User> {
+//                                override fun onSuccess(data: User) {
+//                                    emit.onNext(data)
+//                                    emit.onComplete()
+//                                    log.d("fbDbUser.setUser onSuccess $data")
+//
+//                                }
+//
+//                                override fun onFail(code: Int) {
+//                                    emit.onError(Exception("Time out"))
+//                                    log.d("fbDbUser.setUser onFail $code")
+//                                }
+//                            })
+//                }).subscribe({
+//                    this@SplashPresenter.user = it
+//                    taskOffDbUser = true
+//                    taskOff()
+//
+//                    observable?.let {
+//                        log.d("USER : observable isDisposed 2 : ${it.isDisposed}")
+//                    }
+//                }, {
+//                    this@SplashPresenter.user = null
+//                    taskOffDbUser = true
+//                    taskOff()
+//                }, {
+//                    observable?.let {
+//                        log.d("USER : observable complete 2 : ${it.isDisposed}")
+//                    }
+//                })
 
                 observable?.let {
                     log.d("USER : observable isDisposed 1 : ${it.isDisposed}")
