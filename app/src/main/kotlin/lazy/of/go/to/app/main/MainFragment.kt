@@ -1,14 +1,10 @@
 package lazy.of.go.to.app.main
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.DecelerateInterpolator
-import kotlinx.android.synthetic.main.splash_view.*
 import lazy.of.go.to.R
 import lazy.of.go.to.base.MvpFragment
 import lazy.of.go.to.di.ActivityScoped
