@@ -9,8 +9,8 @@ import lazy.of.go.to.auth.LazyUser
 import lazy.of.go.to.auth.firebase.FbAuth
 import lazy.of.go.to.base.BaseActivity
 import lazy.of.go.to.common.LocalPreferences
-import lazy.of.go.to.db.DbUser
-import lazy.of.go.to.db.data.User
+import lazy.of.go.to.domain.data.DbUser
+import lazy.of.go.to.domain.entity.User
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
@@ -88,24 +88,24 @@ class LoginActivity: BaseActivity() {
     }
 
     private fun setUser(user: LazyUser) {
-        dbUser.observableSetUser(
-                User(
-                        user.isAnonymous,
-                        user.providerId,
-                        user.displayName ?: "",
-                        user.email ?: "",
-                        user.photoURL?.toString() ?: "")
-        ).subscribe({
-            loadingEnd()
-            showToast("로그인에 성공하였습니다.")
-
-            val intent = Intent(this@LoginActivity, MainActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            startActivity(intent)
-        }, {
-            loadingEnd()
-            showToast("로그인에 실패하였습니다.")
-        })
+//        dbUser.observableSetUser(
+//                User(
+//                        user.isAnonymous,
+//                        user.providerId,
+//                        user.displayName ?: "",
+//                        user.email ?: "",
+//                        user.photoURL?.toString() ?: "")
+//        ).subscribe({
+//            loadingEnd()
+//            showToast("로그인에 성공하였습니다.")
+//
+//            val intent = Intent(this@LoginActivity, MainActivity::class.java)
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+//            startActivity(intent)
+//        }, {
+//            loadingEnd()
+//            showToast("로그인에 실패하였습니다.")
+//        })
     }
 }

@@ -2,9 +2,9 @@ package lazy.of.go.to.db
 
 import com.google.firebase.firestore.FirebaseFirestore
 import io.reactivex.Observable
-import lazy.of.go.to.db.data.User
+import lazy.of.go.to.domain.entity.User
 
-class DbUser constructor(private val db: FirebaseFirestore, private val listener: DbListener) {
+class DbRecord constructor(private val db: FirebaseFirestore, private val listener: DbListener) {
 
     private var _user: User? = null
 

@@ -6,9 +6,9 @@ import dagger.Provides
 import dagger.android.ContributesAndroidInjector
 import lazy.of.go.to.common.Log
 import lazy.of.go.to.db.DbInjection
-import lazy.of.go.to.db.DbUser
 import lazy.of.go.to.di.ActivityScoped
 import lazy.of.go.to.di.FragmentScoped
+import lazy.of.go.to.domain.data.DbUser
 
 /**
  * @author piece.of.lazy

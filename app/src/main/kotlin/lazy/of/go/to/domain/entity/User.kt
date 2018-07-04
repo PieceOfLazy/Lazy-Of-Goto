@@ -1,6 +1,6 @@
-package lazy.of.go.to.db.data
+package lazy.of.go.to.domain.entity
 
-data class User(
+data class User (
         val isAnonymous: Boolean = false,
         val providerId: String = "",
         val name: String = "",

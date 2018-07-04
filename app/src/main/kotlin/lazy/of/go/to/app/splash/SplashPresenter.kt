@@ -3,9 +3,9 @@ package lazy.of.go.to.app.splash
 import io.reactivex.disposables.Disposable
 import lazy.of.go.to.auth.LazyAuth
 import lazy.of.go.to.common.Log
-import lazy.of.go.to.db.DbUser
-import lazy.of.go.to.db.data.User
 import lazy.of.go.to.di.ActivityScoped
+import lazy.of.go.to.domain.data.DbUser
+import lazy.of.go.to.domain.entity.User
 import javax.inject.Inject
 
 /**
@@ -44,7 +44,7 @@ class SplashPresenter @Inject constructor(): SplashContract.Presenter {
         if(!launch) {
             launch = true
             auth.currentUser()?.let {
-                observable = dbUser.observableSetUser(
+                observable = dbUser.set(
                         User(
                                 it.isAnonymous,
                                 it.providerId,
