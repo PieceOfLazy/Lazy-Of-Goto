@@ -2,7 +2,9 @@ package lazy.of.go.to.db
 
 import com.google.firebase.firestore.FirebaseFirestore
 import lazy.of.go.to.common.LocalPreferences
+import lazy.of.go.to.db.fb.FbDbSettingReference
 import lazy.of.go.to.db.fb.FbDbUser
+import lazy.of.go.to.domain.data.DbSettingReference
 import lazy.of.go.to.domain.data.DbUser
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -16,8 +18,16 @@ class DbInjection @Inject constructor() {
 
     private val db = FirebaseFirestore.getInstance()
 
-    private val userFbDB: FbDbUser by lazy {
+    private val fbDbUser: FbDbUser by lazy {
         FbDbUser(db, object : DbListener {
+            override fun getUserUUID(): String {
+                return localPreferences.getValue(LocalPreferences.KEY_USER_UUID, "")
+            }
+        })
+    }
+
+    private val fbDbSettingReference: FbDbSettingReference by lazy {
+        FbDbSettingReference(db, object : DbListener {
             override fun getUserUUID(): String {
                 return localPreferences.getValue(LocalPreferences.KEY_USER_UUID, "")
             }
@@ -28,13 +38,13 @@ class DbInjection @Inject constructor() {
     fun <T : Any> getDB(type: KClass<T>): T {
         when(type) {
             DbUser::class -> {
-                return userFbDB as T
+                return fbDbUser as T
+            }
+            DbSettingReference::class -> {
+                return fbDbSettingReference as T
             }
         }
-//        if (type.is is FbDbUser) {
-//            @Suppress("UNCHECKED_CAST")
-//            return this as T
-//        }
+
         TODO("not implemented db manager") //To change body of created functions use File | Settings | File Templates.
     }
 }

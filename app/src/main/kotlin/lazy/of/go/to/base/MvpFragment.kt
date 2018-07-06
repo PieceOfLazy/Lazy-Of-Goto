@@ -3,12 +3,13 @@ package lazy.of.go.to.base
 import android.content.Context
 import android.content.res.Configuration
 import dagger.android.DaggerFragment
-import lazy.of.framework.library.mvp.MvpPresenter
-import lazy.of.framework.library.mvp.MvpView
 import lazy.of.go.to.base.feature.GetFeature
 import lazy.of.go.to.base.feature.LoadingFeature
+import lazy.of.go.to.base.feature.ToastFeature
 import lazy.of.go.to.common.Log
 import lazy.of.go.to.di.ActivityScoped
+import lazy.of.go.to.exception.AppException
+import lazy.of.go.to.exception.AppExceptionCode
 import javax.inject.Inject
 
 /**
@@ -25,7 +26,7 @@ abstract class MvpFragment<V : MvpView<P>, P : MvpPresenter<V>> : DaggerFragment
             field = value
         }
 
-    protected var featureListener: GetFeature? = null
+    protected var getFeature: GetFeature? = null
 
     override fun setPresenter(presenter: P?) {
         _presenter = presenter
@@ -35,7 +36,7 @@ abstract class MvpFragment<V : MvpView<P>, P : MvpPresenter<V>> : DaggerFragment
         super.onAttach(context)
 
         if(context is GetFeature) {
-            featureListener = context
+            getFeature = context
         }
         _presenter?.onViewAttach(onBindPresenterView())
     }
@@ -44,7 +45,7 @@ abstract class MvpFragment<V : MvpView<P>, P : MvpPresenter<V>> : DaggerFragment
         super.onDetach()
 
         _presenter?.onViewDetach()
-        featureListener = null
+        getFeature = null
     }
 
     override fun onConfigurationChanged(newConfig: Configuration?) {
@@ -52,11 +53,24 @@ abstract class MvpFragment<V : MvpView<P>, P : MvpPresenter<V>> : DaggerFragment
     }
 
     override fun loadingStart() {
-        featureListener?.getFeature(LoadingFeature::class)?.loadingStart()
+        getFeature?.getFeature(LoadingFeature::class)?.loadingStart()
     }
 
     override fun loadingEnd() {
-        featureListener?.getFeature(LoadingFeature::class)?.loadingEnd()
+        getFeature?.getFeature(LoadingFeature::class)?.loadingEnd()
+    }
+
+    @Suppress("NON_EXHAUSTIVE_WHEN")
+    override fun onException(exception: AppException) {
+        when(exception.exceptionCode) {
+            AppExceptionCode.UNKNOWN -> {
+                getFeature?.getFeature(ToastFeature::class)?.showToast("알수 없는 에러가 발생했습니다.\n잠시 후 다시 시도해 주세요.")
+            }
+            AppExceptionCode.DB -> {
+//                exception.cause?.message
+                getFeature?.getFeature(ToastFeature::class)?.showToast("DB가 불안합니다.\n잠시 후 다시 시도해 주세요.")
+            }
+        }
     }
 
     abstract fun onBindPresenterView(): V

@@ -9,11 +9,15 @@ import lazy.of.go.to.exception.AppException
 import lazy.of.go.to.exception.AppExceptionCode
 
 class FbDbUser constructor(private val db: FirebaseFirestore, private val listener: DbListener): DbUser {
+    companion object {
+        const val DB_NAME = "User"
+    }
+
     private var _user: User? = null
 
     override fun set(user: User): Observable<Unit> {
         return Observable.create { emit ->
-            db.collection("User").document(this.listener.getUserUUID())
+            db.collection(DB_NAME).document(this.listener.getUserUUID())
                     .set(user)
                     .addOnSuccessListener {
                         _user = user
@@ -29,7 +33,7 @@ class FbDbUser constructor(private val db: FirebaseFirestore, private val listen
 
     override fun get(): Observable<User> {
         return Observable.create { emit ->
-            db.collection("User").document(this.listener.getUserUUID())
+            db.collection(DB_NAME).document(this.listener.getUserUUID())
                     .get()
                     .addOnSuccessListener {
                         it.toObject(User::class.java)?.let {
@@ -51,24 +55,4 @@ class FbDbUser constructor(private val db: FirebaseFirestore, private val listen
     override fun getUser(): User {
         return _user ?: User()
     }
-
-//    fun observableGetRecordCollection(): Observable<List<CollectionRef>> {
-//        return Observable.create { emit ->
-//            db.collection("User").document(this.listener.getUserUUID()).collection("Records")
-//                    .get()
-//                    .addOnSuccessListener {
-//                        val results = mutableListOf<CollectionRef>()
-//                        it.forEach {
-//                            it.toObject(CollectionRef::class.java).let {
-//                                results.add(it)
-//                            }
-//                        }
-//                        emit.onNext(results)
-//                        emit.onComplete()
-//                    }
-//                    .addOnFailureListener {
-//                        emit.onError(it)
-//                    }
-//        }
-//    }
 }

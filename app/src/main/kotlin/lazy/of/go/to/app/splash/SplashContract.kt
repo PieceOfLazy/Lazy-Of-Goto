@@ -1,7 +1,8 @@
 package lazy.of.go.to.app.splash
 
-import lazy.of.framework.library.mvp.MvpPresenter
-import lazy.of.framework.library.mvp.MvpView
+
+import lazy.of.go.to.base.MvpPresenter
+import lazy.of.go.to.base.MvpView
 
 /**
 * @author lazy.of.zpdl

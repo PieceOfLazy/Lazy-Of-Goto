@@ -4,7 +4,6 @@ import android.content.res.Configuration
 import android.view.ViewGroup
 import lazy.of.framework.library.mvp.MvpContract
 import lazy.of.framework.library.mvp.MvpPresenter
-import lazy.of.framework.library.mvp.MvpView
 import javax.inject.Inject
 
 /**

@@ -44,8 +44,6 @@ class MainFragment @Inject constructor(): MvpFragment<MainContract.View, MainCon
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        loadingStart()
     }
 
     override fun onResume() {
