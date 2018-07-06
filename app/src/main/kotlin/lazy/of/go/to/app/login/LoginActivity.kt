@@ -5,12 +5,16 @@ import android.text.TextUtils
 import android.view.ViewGroup
 import lazy.of.go.to.R
 import lazy.of.go.to.app.main.MainActivity
-import lazy.of.go.to.auth.LazyUser
+import lazy.of.go.to.auth.AuthUser
 import lazy.of.go.to.auth.firebase.FbAuth
 import lazy.of.go.to.base.BaseActivity
+import lazy.of.go.to.base.feature.LoadingFeature
 import lazy.of.go.to.common.LocalPreferences
 import lazy.of.go.to.domain.data.DbUser
 import lazy.of.go.to.domain.entity.User
+import lazy.of.go.to.domain.usecase.SetUser
+import lazy.of.go.to.exception.AppException
+import lazy.of.go.to.usecase.UseCase
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
@@ -33,7 +37,7 @@ class LoginActivity: BaseActivity() {
             auth.signInWithGoogle(this@LoginActivity)
         }
 
-        override fun <T : Any> onGetFeature(type: KClass<T>): T? = this@LoginActivity.onGetFeature(type)
+        override fun <T : Any> getFeature(type: KClass<T>): T? = this@LoginActivity.getFeature(type)
     })
 
     override fun onCreatedContentFrame(frame: ViewGroup) {
@@ -52,9 +56,9 @@ class LoginActivity: BaseActivity() {
                 loadingStart()
             }
 
-            override fun onComplete(Immediately: Boolean, user: LazyUser?) {
+            override fun onComplete(Immediately: Boolean, user: AuthUser?) {
+                loadingEnd()
                 if(user == null) {
-                    loadingEnd()
                     showToast("로그인에 실패하였습니다.")
                 } else {
                     setUser(user)
@@ -69,9 +73,9 @@ class LoginActivity: BaseActivity() {
                 loadingStart()
             }
 
-            override fun onComplete(Immediately: Boolean, user: LazyUser?) {
+            override fun onComplete(Immediately: Boolean, user: AuthUser?) {
+                loadingEnd()
                 if(user == null) {
-                    loadingEnd()
                     showToast("로그인에 실패하였습니다.")
                 } else {
                     var anonymouslyUUID = localPreferences.getValue(LocalPreferences.KEY_AUTH_ANONYMOUSLY, "")
@@ -87,25 +91,24 @@ class LoginActivity: BaseActivity() {
         })
     }
 
-    private fun setUser(user: LazyUser) {
-//        dbUser.observableSetUser(
-//                User(
-//                        user.isAnonymous,
-//                        user.providerId,
-//                        user.displayName ?: "",
-//                        user.email ?: "",
-//                        user.photoURL?.toString() ?: "")
-//        ).subscribe({
-//            loadingEnd()
-//            showToast("로그인에 성공하였습니다.")
-//
-//            val intent = Intent(this@LoginActivity, MainActivity::class.java)
-//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-//            startActivity(intent)
-//        }, {
-//            loadingEnd()
-//            showToast("로그인에 실패하였습니다.")
-//        })
+    private fun setUser(user: AuthUser) {
+        SetUser(user, dbUser).apply {
+            setLoadingFeature(getFeature(LoadingFeature::class))
+            setUseCaseCallback(object : UseCase.UseCaseCallback<User> {
+                override fun onSuccess(response: User) {
+                    showToast("로그인에 성공하였습니다.")
+
+                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    startActivity(intent)
+                }
+
+                override fun onError(exception: AppException) {
+                    showToast("로그인에 실패하였습니다.")
+                }
+            })
+            run()
+        }
     }
 }

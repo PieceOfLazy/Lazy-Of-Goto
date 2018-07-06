@@ -3,9 +3,10 @@ package lazy.of.go.to.db.fb
 import com.google.firebase.firestore.FirebaseFirestore
 import io.reactivex.Observable
 import lazy.of.go.to.db.DbListener
-import lazy.of.go.to.db.data.CollectionRef
 import lazy.of.go.to.domain.data.DbUser
 import lazy.of.go.to.domain.entity.User
+import lazy.of.go.to.exception.AppException
+import lazy.of.go.to.exception.AppExceptionCode
 
 class FbDbUser constructor(private val db: FirebaseFirestore, private val listener: DbListener): DbUser {
     private var _user: User? = null
@@ -21,7 +22,7 @@ class FbDbUser constructor(private val db: FirebaseFirestore, private val listen
                     }
                     .addOnFailureListener {
                         _user = null
-                        emit.onError(it)
+                        emit.onError(AppException(AppExceptionCode.DB, it))
                     }
         }
     }
@@ -37,12 +38,12 @@ class FbDbUser constructor(private val db: FirebaseFirestore, private val listen
                             emit.onComplete()
                         } ?: run {
                             _user = null
-                            emit.onError(Exception("User is null"))
+                            emit.onError(AppException(AppExceptionCode.USER_IS_NULL))
                         }
                     }
                     .addOnFailureListener {
                         _user = null
-                        emit.onError(it)
+                        emit.onError(AppException(AppExceptionCode.DB, it))
                     }
         }
     }
@@ -51,23 +52,23 @@ class FbDbUser constructor(private val db: FirebaseFirestore, private val listen
         return _user ?: User()
     }
 
-    fun observableGetRecordCollection(): Observable<List<CollectionRef>> {
-        return Observable.create { emit ->
-            db.collection("User").document(this.listener.getUserUUID()).collection("Records")
-                    .get()
-                    .addOnSuccessListener {
-                        val results = mutableListOf<CollectionRef>()
-                        it.forEach {
-                            it.toObject(CollectionRef::class.java).let {
-                                results.add(it)
-                            }
-                        }
-                        emit.onNext(results)
-                        emit.onComplete()
-                    }
-                    .addOnFailureListener {
-                        emit.onError(it)
-                    }
-        }
-    }
+//    fun observableGetRecordCollection(): Observable<List<CollectionRef>> {
+//        return Observable.create { emit ->
+//            db.collection("User").document(this.listener.getUserUUID()).collection("Records")
+//                    .get()
+//                    .addOnSuccessListener {
+//                        val results = mutableListOf<CollectionRef>()
+//                        it.forEach {
+//                            it.toObject(CollectionRef::class.java).let {
+//                                results.add(it)
+//                            }
+//                        }
+//                        emit.onNext(results)
+//                        emit.onComplete()
+//                    }
+//                    .addOnFailureListener {
+//                        emit.onError(it)
+//                    }
+//        }
+//    }
 }

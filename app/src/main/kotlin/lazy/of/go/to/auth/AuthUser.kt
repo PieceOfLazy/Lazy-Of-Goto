@@ -5,7 +5,7 @@ import android.net.Uri
 /**
  * @author lazy.of.zpdl
  */
-interface LazyUser {
+interface AuthUser {
 
     val uuid: String
 

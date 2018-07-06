@@ -5,10 +5,9 @@ import android.os.Message
 import android.view.ViewGroup
 import android.widget.Toast
 import dagger.android.DaggerActivity
-import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_base.*
 import lazy.of.go.to.R
-import lazy.of.go.to.base.feature.FeatureListener
+import lazy.of.go.to.base.feature.GetFeature
 import lazy.of.go.to.base.feature.LoadingFeature
 import lazy.of.go.to.base.feature.ToastFeature
 import lazy.of.go.to.common.LogImpl
@@ -22,7 +21,7 @@ import kotlin.reflect.KClass
 abstract class BaseActivity :
         DaggerActivity(),
         WeakRefHandler.HandleMessage,
-        FeatureListener,
+        GetFeature,
         LoadingFeature,
         ToastFeature {
 
@@ -95,12 +94,13 @@ abstract class BaseActivity :
         handler.sendMessage(msg)
     }
 
-    override fun <T : Any> onGetFeature(type: KClass<T>): T?  {
+    override fun <T : Any> getFeature(type: KClass<T>): T  {
         if (type.isInstance(this)) {
             @Suppress("UNCHECKED_CAST")
             return this as T
         }
-        return null
+
+        TODO("not implemented feature")
     }
 
     abstract fun onCreatedContentFrame(frame: ViewGroup)

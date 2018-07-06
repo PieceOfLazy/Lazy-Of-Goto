@@ -4,6 +4,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.android.ContributesAndroidInjector
+import lazy.of.go.to.base.feature.GetFeature
 import lazy.of.go.to.common.Log
 import lazy.of.go.to.di.ActivityScoped
 import lazy.of.go.to.di.FragmentScoped
@@ -27,5 +28,10 @@ abstract class MainModule {
         @ActivityScoped
         @Provides
         internal fun provideLog(activity: MainActivity): Log = activity.log
+
+        @JvmStatic
+        @ActivityScoped
+        @Provides
+        internal fun provideFeatureListener(activity: MainActivity): GetFeature = activity
     }
 }

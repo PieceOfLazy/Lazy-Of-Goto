@@ -3,18 +3,16 @@ package lazy.of.go.to.auth.firebase
 import android.app.Activity
 import android.content.Intent
 import android.util.Log
-import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import lazy.of.go.to.R
 import lazy.of.go.to.auth.LazyAuth
-import lazy.of.go.to.auth.LazyUser
+import lazy.of.go.to.auth.AuthUser
 import lazy.of.go.to.configure.ActivityRequestCode
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -32,9 +30,9 @@ class FbAuth @Inject constructor() : LazyAuth {
 
     private var googleSignInClient: GoogleSignInClient? = null
 
-    override fun currentUser(): LazyUser? {
+    override fun currentUser(): AuthUser? {
         auth.currentUser?.let {
-            return FbUser(it)
+            return FbAuthUser(it)
         }
         return null
     }
@@ -111,7 +109,7 @@ class FbAuth @Inject constructor() : LazyAuth {
 
     interface OnFbAuthCompleteListener {
         fun onStart()
-        fun onComplete(Immediately: Boolean, user: LazyUser?)
+        fun onComplete(Immediately: Boolean, user: AuthUser?)
     }
 }
 

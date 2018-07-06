@@ -2,11 +2,11 @@ package lazy.of.go.to.auth.firebase
 
 import android.net.Uri
 import com.google.firebase.auth.FirebaseUser
-import lazy.of.go.to.auth.LazyUser
+import lazy.of.go.to.auth.AuthUser
 /**
  * @author lazy.of.zpdl
  */
-class FbUser(private val user: FirebaseUser): LazyUser {
+class FbAuthUser(private val user: FirebaseUser): AuthUser {
 
     override val uuid: String
         get() = user.uid

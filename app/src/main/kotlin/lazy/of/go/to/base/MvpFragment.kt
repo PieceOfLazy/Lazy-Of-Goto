@@ -5,7 +5,7 @@ import android.content.res.Configuration
 import dagger.android.DaggerFragment
 import lazy.of.framework.library.mvp.MvpPresenter
 import lazy.of.framework.library.mvp.MvpView
-import lazy.of.go.to.base.feature.FeatureListener
+import lazy.of.go.to.base.feature.GetFeature
 import lazy.of.go.to.base.feature.LoadingFeature
 import lazy.of.go.to.common.Log
 import lazy.of.go.to.di.ActivityScoped
@@ -25,7 +25,7 @@ abstract class MvpFragment<V : MvpView<P>, P : MvpPresenter<V>> : DaggerFragment
             field = value
         }
 
-    protected var featureListener: FeatureListener? = null
+    protected var featureListener: GetFeature? = null
 
     override fun setPresenter(presenter: P?) {
         _presenter = presenter
@@ -34,7 +34,7 @@ abstract class MvpFragment<V : MvpView<P>, P : MvpPresenter<V>> : DaggerFragment
     override fun onAttach(context: Context?) {
         super.onAttach(context)
 
-        if(context is FeatureListener) {
+        if(context is GetFeature) {
             featureListener = context
         }
         _presenter?.onViewAttach(onBindPresenterView())
@@ -52,11 +52,11 @@ abstract class MvpFragment<V : MvpView<P>, P : MvpPresenter<V>> : DaggerFragment
     }
 
     override fun loadingStart() {
-        featureListener?.onGetFeature(LoadingFeature::class)?.loadingStart()
+        featureListener?.getFeature(LoadingFeature::class)?.loadingStart()
     }
 
     override fun loadingEnd() {
-        featureListener?.onGetFeature(LoadingFeature::class)?.loadingEnd()
+        featureListener?.getFeature(LoadingFeature::class)?.loadingEnd()
     }
 
     abstract fun onBindPresenterView(): V

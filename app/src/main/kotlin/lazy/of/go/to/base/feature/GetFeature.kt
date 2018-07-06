@@ -5,6 +5,6 @@ import kotlin.reflect.KClass
 /**
  * @author lazy.of.zpdl
  */
-interface FeatureListener {
-    fun <T: Any> onGetFeature(type: KClass<T>): T?
+interface GetFeature {
+    fun <T: Any> getFeature(type: KClass<T>): T?
 }

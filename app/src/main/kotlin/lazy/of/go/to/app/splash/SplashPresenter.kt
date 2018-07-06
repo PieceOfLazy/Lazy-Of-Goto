@@ -1,11 +1,14 @@
 package lazy.of.go.to.app.splash
 
-import io.reactivex.disposables.Disposable
 import lazy.of.go.to.auth.LazyAuth
+import lazy.of.go.to.base.feature.GetFeature
 import lazy.of.go.to.common.Log
 import lazy.of.go.to.di.ActivityScoped
 import lazy.of.go.to.domain.data.DbUser
 import lazy.of.go.to.domain.entity.User
+import lazy.of.go.to.domain.usecase.SetUser
+import lazy.of.go.to.exception.AppException
+import lazy.of.go.to.usecase.UseCase
 import javax.inject.Inject
 
 /**
@@ -13,7 +16,8 @@ import javax.inject.Inject
  */
 @ActivityScoped
 class SplashPresenter @Inject constructor(): SplashContract.Presenter {
-
+    @Inject
+    lateinit var getFeature: GetFeature
     @Inject
     lateinit var log: Log
     @Inject
@@ -29,8 +33,6 @@ class SplashPresenter @Inject constructor(): SplashContract.Presenter {
     private var taskOffDbUser = false
     private var taskOffAnimation = false
 
-    private var observable : Disposable? = null
-
     override fun onViewAttach(view: SplashContract.View) {
         this.view = view
         this.view?.setPresenter(this)
@@ -44,50 +46,22 @@ class SplashPresenter @Inject constructor(): SplashContract.Presenter {
         if(!launch) {
             launch = true
             auth.currentUser()?.let {
-                observable = dbUser.set(
-                        User(
-                                it.isAnonymous,
-                                it.providerId,
-                                it.displayName ?: "",
-                                it.email ?: "",
-                                it.photoURL?.toString() ?: "")
-                ).map {
-                    dbUser.getUser()
-                }.subscribe({
-                    this@SplashPresenter.user = it
-                    taskOffDbUser = true
-                    taskOff()
+                SetUser(it, dbUser).apply {
+                    setUseCaseCallback(object : UseCase.UseCaseCallback<User> {
+                        override fun onSuccess(response: User) {
+                            this@SplashPresenter.user = response
+                            taskOffDbUser = true
+                            taskOff()
+                        }
 
-                    observable?.let {
-                        log.d("USER : subscribe onNext : ${it.isDisposed}")
-                    }
-                }, {
-                    this@SplashPresenter.user = null
-                    taskOffDbUser = true
-                    taskOff()
-
-                    observable?.let {
-                        log.d("USER : subscribe onError : ${it.isDisposed}")
-                    }
-                }, {
-                    observable?.let {
-                        log.d("USER : observable onComplete : ${it.isDisposed}")
-                    }
-                })
-
-                observable?.let {
-                    log.d("USER : observable isDisposed : ${it.isDisposed}")
+                        override fun onError(exception: AppException) {
+                            this@SplashPresenter.user = null
+                            taskOffDbUser = true
+                            taskOff()
+                        }
+                    })
+                    run()
                 }
-
-
-                log.d("USER : uuid : ${it.uuid}")
-                log.d("USER : email : ${it.email}")
-                log.d("USER : emailVerified : ${it.emailVerified}")
-                log.d("USER : phoneNumber : ${it.phoneNumber}")
-                log.d("USER : displayName : ${it.displayName}")
-                log.d("USER : photoURL : ${it.photoURL}")
-                log.d("USER : isAnonymous : ${it.isAnonymous}")
-                log.d("USER : providerId : ${it.providerId}")
             } ?: run {
                 taskOffDbUser = true
             }
