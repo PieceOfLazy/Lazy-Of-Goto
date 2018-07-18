@@ -1,7 +1,6 @@
 package lazy.of.go.to.domain.usecase
 
 import io.reactivex.Observable
-import lazy.of.framework.library.tree.TreeNode
 import lazy.of.go.to.domain.data.DbSettingReference
 import lazy.of.go.to.domain.entity.SettingReference
 import lazy.of.go.to.usecase.UseCase
@@ -29,7 +28,7 @@ class GetSettingReferences constructor(userUUID: String, private val dbSettingRe
             Observable.just(list)
         } else {
             dbSettingReference
-                    .add(userUUID)
+                    .add(SettingReference("", userUUID))
                     .flatMap {
                         dbSettingReference.get()
                     }
@@ -37,11 +36,8 @@ class GetSettingReferences constructor(userUUID: String, private val dbSettingRe
     }
 
     private fun containMine(userUUID: String, list: List<SettingReference>): Boolean {
-        list.filter {
+        return !list.none {
             it.userUUID == userUUID
-        }.first {
-            return true
         }
-        return false
     }
 }
