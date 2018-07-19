@@ -44,28 +44,20 @@ class MainPresenter @Inject constructor(): MainContract.Presenter {
     override fun onLaunch() {
         if(!launch) {
             launch = true
-            loadSetting()
-
+            loadSettingReferences()
         }
     }
 
-    private fun loadSetting() {
+    private fun loadSettingReferences() {
         GetSettingReferences(localPreferences.getValue(LocalPreferences.KEY_USER_UUID, ""), dbSettingReference).apply {
             setLoadingFeature(getFeature.getFeature(LoadingFeature::class))
             setUseCaseCallback(object : UseCase.UseCaseCallback<List<SettingReference>> {
                 override fun onSuccess(response: List<SettingReference>) {
-//                    showToast("로그인에 성공하였습니다.")
-//
-//                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-//                    startActivity(intent)
-                    view?.onLaunch()
+                    view?.onLaunch(response)
                 }
 
                 override fun onError(exception: AppException) {
                     view?.onException(exception)
-//                    showToast("로그인에 실패하였습니다.")
                 }
             })
             run()

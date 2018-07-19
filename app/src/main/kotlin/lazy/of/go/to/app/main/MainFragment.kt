@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import lazy.of.go.to.R
 import lazy.of.go.to.base.MvpFragment
 import lazy.of.go.to.di.ActivityScoped
+import lazy.of.go.to.domain.entity.SettingReference
 import javax.inject.Inject
 
 /**
@@ -15,7 +16,6 @@ import javax.inject.Inject
  */
 @ActivityScoped
 class MainFragment @Inject constructor(): MvpFragment<MainContract.View, MainContract.Presenter>(), MainContract.View {
-
     interface OnFragmentListener {
         fun onLogin()
         fun onMain()
@@ -35,7 +35,7 @@ class MainFragment @Inject constructor(): MvpFragment<MainContract.View, MainCon
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (view == null) {
             inflater?.let {
-                return it.inflate(R.layout.activity_main_fragment, container, false)
+                return it.inflate(R.layout.main_fragment, container, false)
             }
             return super.onCreateView(inflater, container, savedInstanceState)
         }
@@ -58,26 +58,8 @@ class MainFragment @Inject constructor(): MvpFragment<MainContract.View, MainCon
         listener = null
     }
 
-    override fun onLaunch() {
-//        splash_view_content
-//                .animate()
-//                .withLayer()
-//                .alpha(1.0f)
-//                .setInterpolator(DecelerateInterpolator())
-//                .setDuration(1000)
-//                .setListener(object : AnimatorListenerAdapter() {
-//                    override fun onAnimationEnd(p0: Animator?) {
-//                        _presenter?.onAnimationEnd()
-//                    }
-//                })
-//                .start()
+    override fun onLaunch(list: List<SettingReference>) {
+
     }
 
-//    override fun onFinish(isLogin: Boolean) {
-//        if(isLogin) {
-//            listener?.onMain()
-//        } else {
-//            listener?.onLogin()
-//        }
-//    }
 }

@@ -23,7 +23,7 @@ class FbDbSettingReference constructor(private val db: FirebaseFirestore, privat
                 settingReference.userUUID,
                 getSettingPath(settingReference.settingPath),
                 getRecordPath(settingReference.recordPath),
-                true,
+                false,
                 true
                 )
 
@@ -51,7 +51,9 @@ class FbDbSettingReference constructor(private val db: FirebaseFirestore, privat
                         val results = mutableListOf<SettingReference>()
                         it.forEach {
                             it.toObject(SettingReference::class.java).let {
-                                results.add(it)
+                                if(it.valid) {
+                                    results.add(it)
+                                }
                             }
                         }
                         emit.onNext(results)

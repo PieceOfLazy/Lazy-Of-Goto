@@ -5,8 +5,8 @@ import lazy.of.go.to.domain.entity.Setting
 import lazy.of.go.to.domain.entity.SettingReference
 import lazy.of.go.to.domain.entity.User
 
-interface DbSettings {
-    fun set(settingReference: SettingReference): Observable<Unit>
+interface DbSetting {
+    fun set(setting: Setting): Observable<Unit>
 
     fun get(): Observable<SettingReference>
     fun count()
