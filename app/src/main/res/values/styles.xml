@@ -4,10 +4,10 @@
     <style name="AppTheme" parent="android:Theme.Material.Light">
         <!-- Customize your theme here. -->
         <item name="android:colorPrimary">@color/type_fg</item>
-        <item name="android:colorPrimaryDark">@color/type_fg_main</item>
+        <item name="android:colorPrimaryDark">@color/type_fg_default</item>
         <item name="android:colorAccent">@color/type_primary_30</item>
-        <item name="android:textColorPrimary">@color/type_fg_main</item>
-        <item name="android:navigationBarColor">@color/type_fg_main</item>
+        <item name="android:textColorPrimary">@color/type_fg_default</item>
+        <item name="android:navigationBarColor">@color/type_fg_default</item>
         <item name="android:windowBackground">@color/type_bg</item>
     </style>
 
@@ -33,8 +33,16 @@
         <item name="imageWidth">@dimen/dp28</item>
         <item name="imageHeight">@dimen/dp28</item>
         <item name="textSize">@dimen/dp14</item>
-        <item name="textColor">@color/type_fg_main</item>
+        <item name="textColor">@color/type_fg_default</item>
         <item name="textStyle">normal</item>
     </style>
 
+    <style name="TextView_fg_subject" parent="@android:style/Widget.TextView">
+        <item name="paddingStart">@dimen/margin_start</item>
+        <item name="paddingEnd">@dimen/margin_end</item>
+        <item name="textSize">@dimen/dp14</item>
+        <item name="textColor">@color/type_fg_default</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+    </style>
 </resources>

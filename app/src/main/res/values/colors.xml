@@ -11,12 +11,13 @@
     <color name="type_primary_30">#FF0060FF</color>
 
     <color name="type_bg">#FFF2F2F2</color>
-    <color name="type_bg_main">#FFFFFFFF</color>
+    <color name="type_bg_default">#FFFFFFFF</color>
     <color name="type_bg_sub">#FF868686</color>
     <color name="type_bg_divider">#FFEEEEEE</color>
 
     <color name="type_fg">#FFFFFFFF</color>
-    <color name="type_fg_main">#FF000000</color>
-    <color name="type_fg_sub">#FF868686</color>
+    <color name="type_fg_default">#FF000000</color>
+    <color name="type_fg_disable">#FF868686</color>
+    <color name="type_fg_highlight">@color/type_primary_30</color>
     <color name="type_fg_divider">#FFEEEEEE</color>
 </resources>

@@ -1,27 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="dp01">1.0dp</dimen>
-    <dimen name="dp02">2.0dp</dimen>
+    <dimen name="divider">1px</dimen>
 
-    <dimen name="dp04">4.0dp</dimen>
-    <dimen name="dp06">6.0dp</dimen>
-    <dimen name="dp08">8.0dp</dimen>
-    <dimen name="dp10">10.0dp</dimen>
-    <dimen name="dp12">12.0dp</dimen>
-    <dimen name="dp14">14.0dp</dimen>
-    <dimen name="dp16">16.0dp</dimen>
+    <dimen name="margin_start">@dimen/dp16</dimen>
+    <dimen name="margin_end">@dimen/dp16</dimen>
+    <dimen name="margin_divider">@dimen/dp08</dimen>
 
-    <dimen name="dp20">20.0dp</dimen>
-    <dimen name="dp24">24.0dp</dimen>
-    <dimen name="dp28">28.0dp</dimen>
-    <dimen name="dp32">32.0dp</dimen>
-    <dimen name="dp36">36.0dp</dimen>
-    <dimen name="dp40">40.0dp</dimen>
-    <dimen name="dp42">42.0dp</dimen>
-
-    <dimen name="dp48">48.0dp</dimen>
-    <dimen name="dp56">56.0dp</dimen>
-    <dimen name="dp64">64.0dp</dimen>
-
-    <dimen name="dp240">240.0dp</dimen>
 </resources>

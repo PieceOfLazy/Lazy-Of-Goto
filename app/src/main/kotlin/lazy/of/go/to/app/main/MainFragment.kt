@@ -2,9 +2,13 @@ package lazy.of.go.to.app.main
 
 import android.content.Context
 import android.os.Bundle
+import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.main_fragment.*
+import lazy.of.framework.library.panel.PanelBase
+import lazy.of.framework.library.panel.viewpager.ViewPagerPanelAdapter
 import lazy.of.go.to.R
 import lazy.of.go.to.base.MvpFragment
 import lazy.of.go.to.di.ActivityScoped
@@ -21,6 +25,8 @@ class MainFragment @Inject constructor(): MvpFragment<MainContract.View, MainCon
         fun onMain()
     }
     private var listener: OnFragmentListener? = null
+
+    private lateinit var adapter: Adapter
 
     override fun onBindPresenterView(): MainContract.View = this
 
@@ -59,7 +65,46 @@ class MainFragment @Inject constructor(): MvpFragment<MainContract.View, MainCon
     }
 
     override fun onLaunch(list: List<SettingReference>) {
+        val panels = mutableListOf<PanelBase>()
+        for(settingReference in list) {
+            panels.add(MainPanel(settingReference))
+        }
+        panels.add(MainPanel(SettingReference()))
+        panels.add(MainPanel(SettingReference()))
 
+        adapter = Adapter(context, panels)
+
+        main_fragment_view_pager.adapter = adapter
+        main_fragment_view_pager.offscreenPageLimit = 1
+        main_fragment_view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(state: Int) {
+
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+
+            }
+
+            override fun onPageSelected(position: Int) {
+                adapter.getBindItem(position)?.onResume()
+            }
+        })
+        adapter.getBindItem(main_fragment_view_pager.currentItem)?.onResume()
     }
 
+    private class Adapter(context: Context, val list: List<PanelBase>) : ViewPagerPanelAdapter(context) {
+
+        override fun getBindItem(position: Int): PanelBase? {
+            return if (position in 0 until list.size)
+                list[position]
+            else
+                null
+        }
+
+        override fun getCount(): Int = list.size
+
+        override fun getBindItemPosition(panel: PanelBase): Int {
+            return list.indexOf(panel)
+        }
+    }
 }
