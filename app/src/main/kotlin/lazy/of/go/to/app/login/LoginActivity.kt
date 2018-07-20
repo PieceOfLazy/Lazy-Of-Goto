@@ -93,7 +93,9 @@ class LoginActivity: BaseActivity() {
 
     private fun setUser(user: AuthUser) {
         SetUser(user, dbUser).apply {
-            setLoadingFeature(getFeature(LoadingFeature::class))
+            setLoadingFeature {
+                getFeature(LoadingFeature::class)
+            }
             setUseCaseCallback(object : UseCase.UseCaseCallback<User> {
                 override fun onSuccess(response: User) {
                     showToast("로그인에 성공하였습니다.")

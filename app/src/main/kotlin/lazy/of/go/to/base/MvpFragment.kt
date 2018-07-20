@@ -11,6 +11,7 @@ import lazy.of.go.to.di.ActivityScoped
 import lazy.of.go.to.exception.AppException
 import lazy.of.go.to.exception.AppExceptionCode
 import javax.inject.Inject
+import kotlin.reflect.KClass
 
 /**
  * @author piece.of.lazy
@@ -26,7 +27,7 @@ abstract class MvpFragment<V : MvpView<P>, P : MvpPresenter<V>> : DaggerFragment
             field = value
         }
 
-    protected var getFeature: GetFeature? = null
+    protected var featureCallback: GetFeature? = null
 
     override fun setPresenter(presenter: P?) {
         _presenter = presenter
@@ -36,7 +37,7 @@ abstract class MvpFragment<V : MvpView<P>, P : MvpPresenter<V>> : DaggerFragment
         super.onAttach(context)
 
         if(context is GetFeature) {
-            getFeature = context
+            featureCallback = context
         }
         _presenter?.onViewAttach(onBindPresenterView())
     }
@@ -45,7 +46,7 @@ abstract class MvpFragment<V : MvpView<P>, P : MvpPresenter<V>> : DaggerFragment
         super.onDetach()
 
         _presenter?.onViewDetach()
-        getFeature = null
+        featureCallback = null
     }
 
     override fun onConfigurationChanged(newConfig: Configuration?) {
@@ -53,22 +54,24 @@ abstract class MvpFragment<V : MvpView<P>, P : MvpPresenter<V>> : DaggerFragment
     }
 
     override fun loadingStart() {
-        getFeature?.getFeature(LoadingFeature::class)?.loadingStart()
+        featureCallback?.getFeature(LoadingFeature::class)?.loadingStart()
     }
 
     override fun loadingEnd() {
-        getFeature?.getFeature(LoadingFeature::class)?.loadingEnd()
+        featureCallback?.getFeature(LoadingFeature::class)?.loadingEnd()
     }
+
+    override fun <T : Any> getFeature(type: KClass<T>): T? = featureCallback?.getFeature(type)
 
     @Suppress("NON_EXHAUSTIVE_WHEN")
     override fun onException(exception: AppException) {
         when(exception.exceptionCode) {
             AppExceptionCode.UNKNOWN -> {
-                getFeature?.getFeature(ToastFeature::class)?.showToast("알수 없는 에러가 발생했습니다.\n잠시 후 다시 시도해 주세요.")
+                featureCallback?.getFeature(ToastFeature::class)?.showToast("알수 없는 에러가 발생했습니다.\n잠시 후 다시 시도해 주세요.")
             }
             AppExceptionCode.DB -> {
 //                exception.cause?.message
-                getFeature?.getFeature(ToastFeature::class)?.showToast("DB가 불안합니다.\n잠시 후 다시 시도해 주세요.")
+                featureCallback?.getFeature(ToastFeature::class)?.showToast("DB가 불안합니다.\n잠시 후 다시 시도해 주세요.")
             }
         }
     }

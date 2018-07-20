@@ -10,7 +10,7 @@ import lazy.of.go.to.domain.entity.SettingReference
 /**
  * @author lazy.of.zpdl
  */
-class MainPanel constructor(val settingReference: SettingReference, val listener: OnPanelListener? = null): PanelLC() {
+class MainPanel constructor(val settingReference: SettingReference, private var listener: OnPanelListener? = null): PanelLC() {
 
     interface OnPanelListener {
     }
@@ -20,7 +20,7 @@ class MainPanel constructor(val settingReference: SettingReference, val listener
     }
 
     override fun onDestroyView() {
-        Log.d("KKH", "onDestroyView ")
+        listener = null
     }
 
     override fun onResume() {

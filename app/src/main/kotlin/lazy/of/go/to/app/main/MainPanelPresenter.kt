@@ -16,10 +16,11 @@ import javax.inject.Inject
 /**
  * @author lazy.of.zpdl
  */
-@ActivityScoped
-class MainPresenter @Inject constructor(): MainContract.Presenter {
+class MainPanelPresenter constructor(): MainContract.Presenter {
     @Inject
     lateinit var localPreferences: LocalPreferences
+    @Inject
+    lateinit var getFeature: GetFeature
     @Inject
     lateinit var log: Log
     @Inject
@@ -47,18 +48,18 @@ class MainPresenter @Inject constructor(): MainContract.Presenter {
     }
 
     private fun loadSettingReferences() {
-        GetSettingReferences(localPreferences.getValue(LocalPreferences.KEY_USER_UUID, ""), dbSettingReference).apply {
-            setLoadingFeature{view?.getFeature(LoadingFeature::class)}
-            setUseCaseCallback(object : UseCase.UseCaseCallback<List<SettingReference>> {
-                override fun onSuccess(response: List<SettingReference>) {
-                    view?.onLaunch(response)
-                }
-
-                override fun onError(exception: AppException) {
-                    view?.onException(exception)
-                }
-            })
-            run()
-        }
+//        GetSettingReferences(localPreferences.getValue(LocalPreferences.KEY_USER_UUID, ""), dbSettingReference).apply {
+//            setLoadingFeature(getFeature.getFeature(LoadingFeature::class))
+//            setUseCaseCallback(object : UseCase.UseCaseCallback<List<SettingReference>> {
+//                override fun onSuccess(response: List<SettingReference>) {
+//                    view?.onLaunch(response)
+//                }
+//
+//                override fun onError(exception: AppException) {
+//                    view?.onException(exception)
+//                }
+//            })
+//            run()
+//        }
     }
 }

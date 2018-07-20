@@ -14,17 +14,17 @@ abstract class UseCase<Q, P> constructor(private val request: Q) {
 
     private var useCaseCallback: UseCaseCallback<P>? = null
 
-    private var loadingFeature: LoadingFeature? = null
+    private var getLoadingFeature: (() -> LoadingFeature?)? = null
 
     fun setUseCaseCallback(useCaseCallback: UseCaseCallback<P>?) {
         this.useCaseCallback = useCaseCallback
     }
 
-    fun setLoadingFeature(loadingFeature: LoadingFeature?) {
-        this.loadingFeature = loadingFeature
+    fun setLoadingFeature(f: (() -> LoadingFeature?)?) {
+        getLoadingFeature = f
     }
 
-    protected fun getLoadingFeature(): LoadingFeature? = loadingFeature
+    protected fun getLoadingFeature(): LoadingFeature? = getLoadingFeature?.invoke()
 
     protected fun success(response: P) {
         useCaseCallback?.onSuccess(response)
@@ -43,5 +43,9 @@ abstract class UseCase<Q, P> constructor(private val request: Q) {
     interface UseCaseCallback<R> {
         fun onSuccess(response: R)
         fun onError(exception: AppException)
+    }
+
+    interface UseCaseLoadingFeatureCallback {
+        fun getLoadingFeature(): LoadingFeature?
     }
 }

@@ -20,13 +20,14 @@ import javax.inject.Inject
  */
 @ActivityScoped
 class MainFragment @Inject constructor(): MvpFragment<MainContract.View, MainContract.Presenter>(), MainContract.View {
+
     interface OnFragmentListener {
         fun onLogin()
         fun onMain()
     }
     private var listener: OnFragmentListener? = null
 
-    private lateinit var adapter: Adapter
+    private var adapter: Adapter? = null
 
     override fun onBindPresenterView(): MainContract.View = this
 
@@ -36,6 +37,7 @@ class MainFragment @Inject constructor(): MvpFragment<MainContract.View, MainCon
         if(context is OnFragmentListener) {
             listener = context
         }
+
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -62,6 +64,7 @@ class MainFragment @Inject constructor(): MvpFragment<MainContract.View, MainCon
         super.onDetach()
 
         listener = null
+        adapter?.destory()
     }
 
     override fun onLaunch(list: List<SettingReference>) {
@@ -86,10 +89,10 @@ class MainFragment @Inject constructor(): MvpFragment<MainContract.View, MainCon
             }
 
             override fun onPageSelected(position: Int) {
-                adapter.getBindItem(position)?.onResume()
+                adapter?.getBindItem(position)?.onResume()
             }
         })
-        adapter.getBindItem(main_fragment_view_pager.currentItem)?.onResume()
+        adapter?.getBindItem(main_fragment_view_pager.currentItem)?.onResume()
     }
 
     private class Adapter(context: Context, val list: List<PanelBase>) : ViewPagerPanelAdapter(context) {
@@ -105,6 +108,12 @@ class MainFragment @Inject constructor(): MvpFragment<MainContract.View, MainCon
 
         override fun getBindItemPosition(panel: PanelBase): Int {
             return list.indexOf(panel)
+        }
+
+        override fun destory() {
+            for(panel in list) {
+                panel.onDestroyView()
+            }
         }
     }
 }
