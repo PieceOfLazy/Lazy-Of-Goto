@@ -1,39 +1,21 @@
 package lazy.of.go.to.app.main
 
-import lazy.of.go.to.base.feature.GetFeature
-import lazy.of.go.to.base.feature.LoadingFeature
-import lazy.of.go.to.common.LocalPreferences
 import lazy.of.go.to.common.Log
-import lazy.of.go.to.di.ActivityScoped
-import lazy.of.go.to.domain.data.DbSettingReference
 import lazy.of.go.to.domain.data.DbUser
-import lazy.of.go.to.domain.entity.SettingReference
-import lazy.of.go.to.domain.usecase.GetSettingReferences
-import lazy.of.go.to.exception.AppException
-import lazy.of.go.to.usecase.UseCase
-import javax.inject.Inject
 
 /**
  * @author lazy.of.zpdl
  */
-class MainPanelPresenter constructor(): MainContract.Presenter {
-    @Inject
-    lateinit var localPreferences: LocalPreferences
-    @Inject
-    lateinit var getFeature: GetFeature
-    @Inject
-    lateinit var log: Log
-    @Inject
-    lateinit var dbUser: DbUser
-    @Inject
-    lateinit var dbSettingReference: DbSettingReference
+class MainPanelPresenter constructor(val log: Log): MainPanelContract.Presenter {
 
-    private var view: MainContract.View? = null
+    lateinit var dbUser: DbUser
+
+    private var view: MainPanelContract.View? = null
     private var launch = false
 
-    override fun onViewAttach(view: MainContract.View) {
+    override fun onViewAttach(view: MainPanelContract.View) {
         this.view = view
-        this.view?.setPresenter(this)
+        this.view?.initPresenter(this)
     }
 
     override fun onViewDetach() {

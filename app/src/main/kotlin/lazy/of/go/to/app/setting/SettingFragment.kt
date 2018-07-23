@@ -46,7 +46,7 @@ class SettingFragment @Inject constructor(): MvpFragment<SettingContract.View, S
         super.onViewCreated(view, savedInstanceState)
 
         activity_setting_fragment_logout.setOnClickListener({
-            _presenter?.logout()
+            presenter?.logout()
         })
         activity_setting_fragment_crash.setOnClickListener({
             throw RuntimeException("This is a crash")
@@ -56,7 +56,7 @@ class SettingFragment @Inject constructor(): MvpFragment<SettingContract.View, S
     override fun onResume() {
         super.onResume()
 
-        _presenter?.onLaunch()
+        presenter?.onLaunch()
     }
 
     override fun onDetach() {

@@ -11,6 +11,7 @@ import lazy.of.framework.library.panel.PanelBase
 import lazy.of.framework.library.panel.viewpager.ViewPagerPanelAdapter
 import lazy.of.go.to.R
 import lazy.of.go.to.base.MvpFragment
+import lazy.of.go.to.db.DbInjection
 import lazy.of.go.to.di.ActivityScoped
 import lazy.of.go.to.domain.entity.SettingReference
 import javax.inject.Inject
@@ -26,6 +27,9 @@ class MainFragment @Inject constructor(): MvpFragment<MainContract.View, MainCon
         fun onMain()
     }
     private var listener: OnFragmentListener? = null
+
+    @Inject
+    lateinit var dbInjection: DbInjection
 
     private var adapter: Adapter? = null
 
@@ -57,23 +61,23 @@ class MainFragment @Inject constructor(): MvpFragment<MainContract.View, MainCon
     override fun onResume() {
         super.onResume()
 
-        _presenter?.onLaunch()
+        presenter?.onLaunch()
     }
 
     override fun onDetach() {
         super.onDetach()
 
         listener = null
-        adapter?.destory()
+        adapter?.destroy()
     }
 
     override fun onLaunch(list: List<SettingReference>) {
         val panels = mutableListOf<PanelBase>()
         for(settingReference in list) {
-            panels.add(MainPanel(settingReference))
+            panels.add(MainPanel(this, log, dbInjection, settingReference))
         }
-        panels.add(MainPanel(SettingReference()))
-        panels.add(MainPanel(SettingReference()))
+//        panels.add(MainPanel(this, log, dbInjection, SettingReference()))
+//        panels.add(MainPanel(this, log, dbInjection, SettingReference()))
 
         adapter = Adapter(context, panels)
 
@@ -96,7 +100,6 @@ class MainFragment @Inject constructor(): MvpFragment<MainContract.View, MainCon
     }
 
     private class Adapter(context: Context, val list: List<PanelBase>) : ViewPagerPanelAdapter(context) {
-
         override fun getBindItem(position: Int): PanelBase? {
             return if (position in 0 until list.size)
                 list[position]
@@ -110,7 +113,7 @@ class MainFragment @Inject constructor(): MvpFragment<MainContract.View, MainCon
             return list.indexOf(panel)
         }
 
-        override fun destory() {
+        override fun destroy() {
             for(panel in list) {
                 panel.onDestroyView()
             }

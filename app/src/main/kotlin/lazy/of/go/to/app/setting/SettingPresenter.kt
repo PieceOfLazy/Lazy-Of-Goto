@@ -1,7 +1,6 @@
 package lazy.of.go.to.app.setting
 
 import lazy.of.go.to.auth.LazyAuth
-import lazy.of.go.to.common.LocalPreferences
 import lazy.of.go.to.common.Log
 import lazy.of.go.to.di.ActivityScoped
 import javax.inject.Inject
@@ -22,7 +21,7 @@ class SettingPresenter @Inject constructor(): SettingContract.Presenter {
 
     override fun onViewAttach(view: SettingContract.View) {
         this.view = view
-        this.view?.setPresenter(this)
+        this.view?.initPresenter(this)
     }
 
     override fun onViewDetach() {

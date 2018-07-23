@@ -22,15 +22,15 @@ abstract class MvpFragment<V : MvpView<P>, P : MvpPresenter<V>> : DaggerFragment
     @Inject
     lateinit var log: Log
 
-    protected var _presenter: P? = null
+    protected var presenter: P? = null
         private set(value) {
             field = value
         }
 
     protected var featureCallback: GetFeature? = null
 
-    override fun setPresenter(presenter: P?) {
-        _presenter = presenter
+    override fun initPresenter(presenter: P?) {
+        this.presenter = presenter
     }
 
     override fun onAttach(context: Context?) {
@@ -39,13 +39,13 @@ abstract class MvpFragment<V : MvpView<P>, P : MvpPresenter<V>> : DaggerFragment
         if(context is GetFeature) {
             featureCallback = context
         }
-        _presenter?.onViewAttach(onBindPresenterView())
+        presenter?.onViewAttach(onBindPresenterView())
     }
 
     override fun onDetach() {
         super.onDetach()
 
-        _presenter?.onViewDetach()
+        presenter?.onViewDetach()
         featureCallback = null
     }
 

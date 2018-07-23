@@ -1,6 +1,5 @@
 package lazy.of.go.to.app.main
 
-import lazy.of.go.to.base.feature.GetFeature
 import lazy.of.go.to.base.feature.LoadingFeature
 import lazy.of.go.to.common.LocalPreferences
 import lazy.of.go.to.common.Log
@@ -32,7 +31,7 @@ class MainPresenter @Inject constructor(): MainContract.Presenter {
 
     override fun onViewAttach(view: MainContract.View) {
         this.view = view
-        this.view?.setPresenter(this)
+        this.view?.initPresenter(this)
     }
 
     override fun onViewDetach() {

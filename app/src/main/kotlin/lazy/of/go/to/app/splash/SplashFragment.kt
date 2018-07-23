@@ -53,7 +53,7 @@ class SplashFragment @Inject constructor(): MvpFragment<SplashContract.View, Spl
     override fun onResume() {
         super.onResume()
 
-        _presenter?.onLaunch()
+        presenter?.onLaunch()
     }
 
     override fun onDetach() {
@@ -71,7 +71,7 @@ class SplashFragment @Inject constructor(): MvpFragment<SplashContract.View, Spl
                 .setDuration(1000)
                 .setListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(p0: Animator?) {
-                        _presenter?.onAnimationEnd()
+                        presenter?.onAnimationEnd()
                     }
                 })
                 .start()

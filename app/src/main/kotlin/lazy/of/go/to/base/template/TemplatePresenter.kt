@@ -15,7 +15,7 @@ class TemplatePresenter @Inject constructor(private val log: Log): TemplateContr
 
     override fun onViewAttach(view: TemplateContract.View) {
         this.view = view
-        this.view?.setPresenter(this)
+        this.view?.initPresenter(this)
     }
 
     override fun onViewDetach() {

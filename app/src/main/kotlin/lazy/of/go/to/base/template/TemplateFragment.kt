@@ -47,7 +47,7 @@ class TemplateFragment @Inject constructor(): MvpFragment<TemplateContract.View,
     override fun onResume() {
         super.onResume()
 
-        _presenter?.onLaunch()
+        presenter?.onLaunch()
     }
 
     override fun onDetach() {

@@ -35,7 +35,7 @@ class SplashPresenter @Inject constructor(): SplashContract.Presenter {
 
     override fun onViewAttach(view: SplashContract.View) {
         this.view = view
-        this.view?.setPresenter(this)
+        this.view?.initPresenter(this)
     }
 
     override fun onViewDetach() {
