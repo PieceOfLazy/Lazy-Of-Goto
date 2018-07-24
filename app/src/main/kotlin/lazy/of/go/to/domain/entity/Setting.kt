@@ -7,6 +7,6 @@ data class Setting(
         val recordIdx: String,
         val name: String = "",
         val location: GeoPoint? = null,
-        val time: SettingTime = SettingTime(),
+        val time: SettingTime? = null,
         val settingWeek: SettingWeek = SettingWeek()
 )

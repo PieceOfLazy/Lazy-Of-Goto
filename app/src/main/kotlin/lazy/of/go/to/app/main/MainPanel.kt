@@ -26,20 +26,21 @@ class MainPanel constructor(mvpView: MvpView<*>, log: Log, dbInjection: DbInject
     override fun onBindPresenterView(): MainPanelContract.View = this
 
     override fun onBindLayoutContainer(context: Context, layoutContainer: PanelLayoutContainer) {
-//        Log.d("KKH", "onBindLayoutContainer ")
+        presenter.onViewAttach(this)
+
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         listener = null
+        presenter.onViewDetach()
     }
 
     override fun onResume() {
-//        Log.d("KKH", "onResume ")
+        presenter.onLaunch()
     }
 
     override fun onPause() {
-//        Log.d("KKH", "onPause ")
     }
 
     override fun onLayout(): Int = R.layout.main_panel

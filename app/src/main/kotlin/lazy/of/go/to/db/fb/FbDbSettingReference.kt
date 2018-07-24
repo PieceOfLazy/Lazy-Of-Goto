@@ -5,6 +5,7 @@ import io.reactivex.Observable
 import lazy.of.go.to.common.StringUtil
 import lazy.of.go.to.db.DbListener
 import lazy.of.go.to.domain.data.DbSettingReference
+import lazy.of.go.to.domain.entity.Setting
 import lazy.of.go.to.domain.entity.SettingReference
 import lazy.of.go.to.exception.AppException
 import lazy.of.go.to.exception.AppExceptionCode
@@ -17,28 +18,125 @@ class FbDbSettingReference constructor(private val db: FirebaseFirestore, privat
     }
 
     override fun add(settingReference: SettingReference): Observable<Unit> {
-        val addDocument = db.collection(getCollectionPath(settingReference.userUUID)).document()
-        val addSettingReference = SettingReference(
-                addDocument.id,
-                settingReference.userUUID,
-                getSettingPath(settingReference.settingPath),
-                getRecordPath(settingReference.recordPath),
-                false,
-                true
-                )
-
         return Observable.create { emit ->
-            addDocument.set(addSettingReference)
+            val batch = db.batch()
+            var recordIdx = settingReference.recordIdx
+
+            if(StringUtil.isEmpty(recordIdx)) {
+                val documentReference = FbDbRecords.getDocument(db)
+//                    batch.set(documentReference, "")
+                recordIdx = documentReference.id
+            }
+
+            var settingIdx = settingReference.settingIdx
+            if (StringUtil.isEmpty(settingIdx)) {
+                val documentReference = FbDbSetting.getDocument(db)
+                settingIdx = documentReference.id
+                batch.set(documentReference,
+                        Setting(settingIdx,
+                                recordIdx)
+                )
+            }
+
+            val documentReference = db.collection(getCollectionPath(settingReference.userUUID)).document()
+            val settingReferenceData = SettingReference(
+                    documentReference.id,
+                    settingReference.userUUID,
+                    settingIdx,
+                    recordIdx,
+                    false,
+                    true)
+
+            batch.set(documentReference, settingReferenceData)
+            batch
+                    .commit()
                     .addOnSuccessListener {
                         emit.onNext(Unit)
                         emit.onComplete()
-                    }
-                    .addOnFailureListener {
+                    }.addOnFailureListener {
                         emit.onError(AppException(AppExceptionCode.DB, it))
                     }
         }
     }
 
+
+//        db.runTransaction { transaction ->
+//            var recordIdx = settingReference.recordIdx
+//
+//            if(StringUtil.isEmpty(recordIdx)) {
+//                val documentReference = FbDbRecords.getDocument(db)
+////                    transaction.set(documentReference, "")
+//                recordIdx = documentReference.id
+//            }
+//
+//            var settingIdx = settingReference.settingIdx
+//            if(StringUtil.isEmpty(settingIdx)) {
+//                val documentReference = FbDbSetting.getDocument(db)
+//                settingIdx = documentReference.id
+//                transaction.set(documentReference,
+//                        Setting(settingIdx,
+//                                recordIdx)
+//                )
+//            }
+//
+////                val documentReference = db.collection(getCollectionPath(settingReference.userUUID)).document()
+////                val documentSetting = FbDbSetting.getDocument(db, settingReference.settingIdx)
+////                val documentRecords = FbDbRecords.getDocument(db, settingReference.recordIdx)
+////
+////                if(documentSetting == null) {
+////
+////                }
+////                val snapshotSettingReference = transaction.get(documentReference)
+////                if(snapshotSettingReference.exists()) {
+////                    Log.d("KKH", "snapshotSettingReference.exists() : "+snapshotSettingReference.exists())
+////                } else {
+////
+////                }
+//
+////                val snapshotRecords = transaction.get(documentRecords)
+////
+////                val reference = snapshotSettingReference.toObject(SettingReference::class.java)
+////                val result: SettingReference = if (reference != null) {
+////                    reference
+////                } else {
+////                    val tmp = SettingReference(
+////                            documentReference.id,
+////                            settingReference.userUUID,
+////                            documentSetting.id,
+////                            documentRecords.id,
+////                            false,
+////                            true)
+//////                    transaction.set(documentReference, tmp)
+////                    tmp
+////                }
+////
+////                val setting = snapshotSetting.toObject(Setting::class.java)
+////                if (setting == null) {
+//////                    transaction.set(documentSetting, Setting(
+//////                            documentSetting.id, documentRecords.id
+//////                    ))
+////                }
+//
+////                try {
+////                    val snapshotSetting = transaction.get(documentSetting)
+////                } catch (e: Exception) {
+////
+////                }
+//            SettingReference(
+//                    "",
+//                    settingReference.userUUID,
+//                    settingIdx,
+//                    recordIdx,
+//                    false,
+//                    true)
+//        }.addOnSuccessListener {
+//            Log.d("KKH", "it : "+it.toString())
+//            emit.onNext(Unit)
+//            emit.onComplete()
+//        }.addOnFailureListener {
+//            emit.onError(AppException(AppExceptionCode.DB, it))
+//        }
+//    }
     override fun set(settingReference: SettingReference): Observable<Unit> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -69,19 +167,11 @@ class FbDbSettingReference constructor(private val db: FirebaseFirestore, privat
         return "${FbDbUser.DB_NAME}/$userUUID/${FbDbSettingReference.DB_NAME}"
     }
 
-    private fun getSettingPath(path: String): String {
-        return if (StringUtil.isEmpty(path)) {
-            "${FbDbSetting.DB_NAME}/${db.collection(FbDbSetting.DB_NAME).document().id}"
-        } else {
-            path
-        }
-    }
-
-    private fun getRecordPath(recordPath: String): String {
-        return if (StringUtil.isEmpty(recordPath)) {
-            "${FbDbRecords.DB_NAME}/${db.collection(FbDbRecords.DB_NAME).document().id}"
-        } else {
-            recordPath
-        }
-    }
+//    private fun getRecordIdx(idx: String): String {
+//        return if (StringUtil.isEmpty(idx)) {
+//            db.collection(FbDbRecords.DB_NAME).document().id
+//        } else {
+//            idx
+//        }
+//    }
 }

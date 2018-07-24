@@ -2,8 +2,10 @@ package lazy.of.go.to.db
 
 import com.google.firebase.firestore.FirebaseFirestore
 import lazy.of.go.to.common.LocalPreferences
+import lazy.of.go.to.db.fb.FbDbSetting
 import lazy.of.go.to.db.fb.FbDbSettingReference
 import lazy.of.go.to.db.fb.FbDbUser
+import lazy.of.go.to.domain.data.DbSetting
 import lazy.of.go.to.domain.data.DbSettingReference
 import lazy.of.go.to.domain.data.DbUser
 import javax.inject.Inject
@@ -34,6 +36,10 @@ class DbInjection @Inject constructor() {
         })
     }
 
+    private val fbDbSetting: FbDbSetting by lazy {
+        FbDbSetting(db)
+    }
+
     @Suppress("UNCHECKED_CAST")
     fun <T : Any> getDB(type: KClass<T>): T {
         when(type) {
@@ -42,6 +48,9 @@ class DbInjection @Inject constructor() {
             }
             DbSettingReference::class -> {
                 return fbDbSettingReference as T
+            }
+            DbSetting::class -> {
+                return fbDbSetting as T
             }
         }
 
