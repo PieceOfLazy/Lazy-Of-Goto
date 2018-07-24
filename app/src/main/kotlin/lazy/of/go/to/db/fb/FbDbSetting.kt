@@ -2,7 +2,6 @@ package lazy.of.go.to.db.fb
 
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
-import io.reactivex.Emitter
 import io.reactivex.Observable
 import lazy.of.go.to.common.StringUtil
 import lazy.of.go.to.domain.data.DbSetting
