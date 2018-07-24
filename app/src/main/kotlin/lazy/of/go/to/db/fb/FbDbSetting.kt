@@ -2,6 +2,7 @@ package lazy.of.go.to.db.fb
 
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import io.reactivex.Emitter
 import io.reactivex.Observable
 import lazy.of.go.to.common.StringUtil
 import lazy.of.go.to.domain.data.DbSetting
@@ -36,7 +37,17 @@ class FbDbSetting constructor(private val db: FirebaseFirestore): DbSetting {
     }
 
     override fun set(setting: Setting): Observable<Unit> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return Observable.create { emit ->
+            db.collection(DB_NAME).document(setting.idx)
+                    .set(setting)
+                    .addOnSuccessListener {
+                        emit.onNext(Unit)
+                        emit.onComplete()
+                    }
+                    .addOnFailureListener {
+                        emit.onError(AppException(AppExceptionCode.DB, it))
+                    }
+        }
     }
 
     override fun get(idx: String): Observable<Setting> {
@@ -48,7 +59,7 @@ class FbDbSetting constructor(private val db: FirebaseFirestore): DbSetting {
                             emit.onNext(it)
                             emit.onComplete()
                         } ?: run {
-                            set(Setting(idx, "767"))
+                            emit.onError(AppException(AppExceptionCode.DB))
                         }
                     }
                     .addOnFailureListener {
@@ -56,7 +67,4 @@ class FbDbSetting constructor(private val db: FirebaseFirestore): DbSetting {
                     }
         }
     }
-
-
-
 }

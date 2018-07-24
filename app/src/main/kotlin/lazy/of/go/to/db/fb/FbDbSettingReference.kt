@@ -1,5 +1,6 @@
 package lazy.of.go.to.db.fb
 
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import io.reactivex.Observable
 import lazy.of.go.to.common.StringUtil
@@ -19,6 +20,8 @@ class FbDbSettingReference constructor(private val db: FirebaseFirestore, privat
 
     override fun add(settingReference: SettingReference): Observable<Unit> {
         return Observable.create { emit ->
+            val documentSettingReference = db.collection(getCollectionPath(settingReference.userUUID)).document()
+
             val batch = db.batch()
             var recordIdx = settingReference.recordIdx
 
@@ -34,20 +37,19 @@ class FbDbSettingReference constructor(private val db: FirebaseFirestore, privat
                 settingIdx = documentReference.id
                 batch.set(documentReference,
                         Setting(settingIdx,
+                                documentSettingReference.path,
                                 recordIdx)
                 )
             }
 
-            val documentReference = db.collection(getCollectionPath(settingReference.userUUID)).document()
-            val settingReferenceData = SettingReference(
-                    documentReference.id,
+            val referenceData = SettingReference(
+                    documentSettingReference.id,
                     settingReference.userUUID,
                     settingIdx,
-                    recordIdx,
-                    false,
-                    true)
+                    recordIdx
+                    )
 
-            batch.set(documentReference, settingReferenceData)
+            batch.set(documentSettingReference, referenceData)
             batch
                     .commit()
                     .addOnSuccessListener {
