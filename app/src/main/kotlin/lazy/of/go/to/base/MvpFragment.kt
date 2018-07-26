@@ -73,6 +73,9 @@ abstract class MvpFragment<V : MvpView<P>, P : MvpPresenter<V>> : DaggerFragment
 //                exception.cause?.message
                 featureCallback?.getFeature(ToastFeature::class)?.showToast("DB가 불안합니다.\n잠시 후 다시 시도해 주세요.")
             }
+            AppExceptionCode.DB_EMPTY -> {
+                featureCallback?.getFeature(ToastFeature::class)?.showToast("DB 데이타가 없습니다.\n잠시 후 다시 시도해 주세요.")
+            }
         }
     }
 

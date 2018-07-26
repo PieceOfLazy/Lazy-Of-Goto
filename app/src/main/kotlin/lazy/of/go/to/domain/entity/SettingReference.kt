@@ -1,6 +1,5 @@
 package lazy.of.go.to.domain.entity
 
-import com.google.firebase.Timestamp
 import java.util.*
 
 data class SettingReference(
@@ -8,7 +7,7 @@ data class SettingReference(
         val userUUID: String = "",
         val settingIdx: String = "",
         val recordIdx: String = "",
-        val settingUpdated: Timestamp = Timestamp(Date()),
-        val recordUpdated: Timestamp = Timestamp(Date()),
+        val settingUpdated: Date = Date(),
+        val recordUpdated: Date = Date(),
         var valid: Boolean = true
 )

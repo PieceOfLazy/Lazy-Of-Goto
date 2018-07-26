@@ -1,12 +1,14 @@
 package lazy.of.go.to.db.fb
 
-import com.google.firebase.firestore.FieldValue
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import io.reactivex.Observable
 import lazy.of.go.to.common.StringUtil
 import lazy.of.go.to.db.DbListener
+import lazy.of.go.to.db.data.SettingReferenceData
 import lazy.of.go.to.domain.data.DbSettingReference
-import lazy.of.go.to.domain.entity.Setting
+import lazy.of.go.to.domain.EntityMapper
+import lazy.of.go.to.domain.entity.SettingEntity
 import lazy.of.go.to.domain.entity.SettingReference
 import lazy.of.go.to.exception.AppException
 import lazy.of.go.to.exception.AppExceptionCode
@@ -16,6 +18,32 @@ class FbDbSettingReference constructor(private val db: FirebaseFirestore, privat
 
     companion object {
         const val DB_NAME = "SettingReference"
+    }
+
+    private val entityMapper = object : EntityMapper<SettingReference, SettingReferenceData> {
+        override fun fromObject(obj: SettingReferenceData): SettingReference {
+            return SettingReference(
+                    obj.idx,
+                    obj.userUUID,
+                    obj.settingIdx,
+                    obj.recordIdx,
+                    obj.settingUpdated.toDate(),
+                    obj.recordUpdated.toDate(),
+                    obj.valid
+            )
+        }
+
+        override fun toObject(obj: SettingReference): SettingReferenceData {
+            return SettingReferenceData(
+                    obj.idx,
+                    obj.userUUID,
+                    obj.settingIdx,
+                    obj.recordIdx,
+                    Timestamp(obj.settingUpdated),
+                    Timestamp(obj.recordUpdated),
+                    obj.valid
+            )
+        }
     }
 
     override fun add(settingReference: SettingReference): Observable<Unit> {
@@ -36,20 +64,20 @@ class FbDbSettingReference constructor(private val db: FirebaseFirestore, privat
                 val documentReference = FbDbSetting.getDocument(db)
                 settingIdx = documentReference.id
                 batch.set(documentReference,
-                        Setting(settingIdx,
+                        SettingEntity(settingIdx,
                                 documentSettingReference.path,
                                 recordIdx)
                 )
             }
 
-            val referenceData = SettingReference(
+            val settingReferenceData = SettingReferenceData(
                     documentSettingReference.id,
                     settingReference.userUUID,
                     settingIdx,
                     recordIdx
                     )
 
-            batch.set(documentSettingReference, referenceData)
+            batch.set(documentSettingReference, settingReferenceData)
             batch
                     .commit()
                     .addOnSuccessListener {
@@ -61,84 +89,6 @@ class FbDbSettingReference constructor(private val db: FirebaseFirestore, privat
         }
     }
 
-
-//        db.runTransaction { transaction ->
-//            var recordIdx = settingReference.recordIdx
-//
-//            if(StringUtil.isEmpty(recordIdx)) {
-//                val documentReference = FbDbRecords.getDocument(db)
-////                    transaction.set(documentReference, "")
-//                recordIdx = documentReference.id
-//            }
-//
-//            var settingIdx = settingReference.settingIdx
-//            if(StringUtil.isEmpty(settingIdx)) {
-//                val documentReference = FbDbSetting.getDocument(db)
-//                settingIdx = documentReference.id
-//                transaction.set(documentReference,
-//                        Setting(settingIdx,
-//                                recordIdx)
-//                )
-//            }
-//
-////                val documentReference = db.collection(getCollectionPath(settingReference.userUUID)).document()
-////                val documentSetting = FbDbSetting.getDocument(db, settingReference.settingIdx)
-////                val documentRecords = FbDbRecords.getDocument(db, settingReference.recordIdx)
-////
-////                if(documentSetting == null) {
-////
-////                }
-////                val snapshotSettingReference = transaction.get(documentReference)
-////                if(snapshotSettingReference.exists()) {
-////                    Log.d("KKH", "snapshotSettingReference.exists() : "+snapshotSettingReference.exists())
-////                } else {
-////
-////                }
-//
-////                val snapshotRecords = transaction.get(documentRecords)
-////
-////                val reference = snapshotSettingReference.toObject(SettingReference::class.java)
-////                val result: SettingReference = if (reference != null) {
-////                    reference
-////                } else {
-////                    val tmp = SettingReference(
-////                            documentReference.id,
-////                            settingReference.userUUID,
-////                            documentSetting.id,
-////                            documentRecords.id,
-////                            false,
-////                            true)
-//////                    transaction.set(documentReference, tmp)
-////                    tmp
-////                }
-////
-////                val setting = snapshotSetting.toObject(Setting::class.java)
-////                if (setting == null) {
-//////                    transaction.set(documentSetting, Setting(
-//////                            documentSetting.id, documentRecords.id
-//////                    ))
-////                }
-//
-////                try {
-////                    val snapshotSetting = transaction.get(documentSetting)
-////                } catch (e: Exception) {
-////
-////                }
-//            SettingReference(
-//                    "",
-//                    settingReference.userUUID,
-//                    settingIdx,
-//                    recordIdx,
-//                    false,
-//                    true)
-//        }.addOnSuccessListener {
-//            Log.d("KKH", "it : "+it.toString())
-//            emit.onNext(Unit)
-//            emit.onComplete()
-//        }.addOnFailureListener {
-//            emit.onError(AppException(AppExceptionCode.DB, it))
-//        }
-//    }
     override fun set(settingReference: SettingReference): Observable<Unit> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
