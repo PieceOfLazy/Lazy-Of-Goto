@@ -1,6 +1,8 @@
 package lazy.of.go.to.domain.entity
 
 data class RecordTimeEntity(
+        val holiday: Boolean = false,
+
         val goCheckTime: Int? = null,
         val goRecordTime: Int? = null,
         val goPhotoUrl: String = "",

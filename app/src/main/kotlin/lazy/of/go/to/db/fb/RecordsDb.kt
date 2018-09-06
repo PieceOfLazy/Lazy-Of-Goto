@@ -9,8 +9,8 @@ import lazy.of.go.to.common.DateUtil
 import lazy.of.go.to.common.StringUtil
 import lazy.of.go.to.db.data.RecordDbData
 import lazy.of.go.to.db.mapper.EntityMapper
-import lazy.of.go.to.db.mapper.LocationEntityMapper
-import lazy.of.go.to.db.mapper.RecordTimeEntityMapper
+import lazy.of.go.to.db.mapper.LocationMapper
+import lazy.of.go.to.db.mapper.RecordTimeMapper
 import lazy.of.go.to.domain.data.RecordRepository
 import lazy.of.go.to.domain.entity.EntitySet
 import lazy.of.go.to.domain.entity.RecordEntity
@@ -47,9 +47,9 @@ class RecordsDb constructor(private val db: FirebaseFirestore) : RecordRepositor
             return RecordEntity(
                     obj.date.toDate(),
                     obj.name,
-                    LocationEntityMapper.fromNullableObject(obj.location),
+                    LocationMapper.fromNullableObject(obj.location),
                     obj.settingTime,
-                    RecordTimeEntityMapper.fromNullableObject(obj.recordTime)
+                    RecordTimeMapper.fromNullableObject(obj.recordTime)
             )
         }
 
@@ -57,9 +57,9 @@ class RecordsDb constructor(private val db: FirebaseFirestore) : RecordRepositor
             return RecordDbData(
                     Timestamp(obj.date),
                     obj.name,
-                    LocationEntityMapper.toNullableObject(obj.location),
+                    LocationMapper.toNullableObject(obj.location),
                     obj.settingTime,
-                    RecordTimeEntityMapper.toNullableObject(obj.recordTime)
+                    RecordTimeMapper.toNullableObject(obj.recordTime)
             )
         }
     }

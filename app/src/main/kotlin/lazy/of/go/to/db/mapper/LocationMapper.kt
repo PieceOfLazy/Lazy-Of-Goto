@@ -3,7 +3,7 @@ package lazy.of.go.to.db.mapper
 import com.google.firebase.firestore.GeoPoint
 import lazy.of.go.to.domain.entity.LocationEntity
 
-class LocationEntityMapper {
+class LocationMapper {
 
     companion object : EntityNullableMapper<LocationEntity, GeoPoint>() {
         override fun fromObject(obj: GeoPoint): LocationEntity {

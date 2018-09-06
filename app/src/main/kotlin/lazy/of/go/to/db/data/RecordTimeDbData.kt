@@ -1,6 +1,8 @@
 package lazy.of.go.to.db.data
 
 data class RecordTimeDbData(
+        val holiday: Boolean = false,
+
         val goCheckTime: Int? = null,
         val goRecordTime: Int? = null,
         val goPhotoUrl: String = "",
