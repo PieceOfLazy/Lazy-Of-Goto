@@ -100,6 +100,7 @@ class MainFragment @Inject constructor(): MvpFragment<MainContract.View, MainCon
     }
 
     private class Adapter(context: Context, val list: List<PanelBase>) : ViewPagerPanelAdapter(context) {
+
         override fun getBindItem(position: Int): PanelBase? {
             return if (position in 0 until list.size)
                 list[position]

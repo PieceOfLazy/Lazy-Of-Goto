@@ -7,13 +7,15 @@ import lazy.of.go.to.base.MvpPanel
 import lazy.of.go.to.base.MvpView
 import lazy.of.go.to.common.Log
 import lazy.of.go.to.db.DbInjection
+import lazy.of.go.to.domain.data.DbSetting
 import lazy.of.go.to.domain.entity.SettingReference
 
 /**
  * @author lazy.of.zpdl
  */
-class MainPanel constructor(mvpView: MvpView<*>, log: Log, dbInjection: DbInjection, val settingReference: SettingReference, private var listener: OnPanelListener? = null):
+class MainPanel constructor(mvpView: MvpView<*>, log: Log, dbInjection: DbInjection, settingReference: SettingReference, private var listener: OnPanelListener? = null):
         MvpPanel<MainPanelContract.View, MainPanelContract.Presenter>(mvpView, log, dbInjection), MainPanelContract.View {
+
     override fun onLaunch(list: List<SettingReference>) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -21,19 +23,16 @@ class MainPanel constructor(mvpView: MvpView<*>, log: Log, dbInjection: DbInject
     interface OnPanelListener {
     }
 
-    override val presenter: MainPanelContract.Presenter = MainPanelPresenter(log)
+    override val presenter: MainPanelContract.Presenter = MainPanelPresenter(log, dbInjection.getDB(DbSetting::class), settingReference)
 
     override fun onBindPresenterView(): MainPanelContract.View = this
 
     override fun onBindLayoutContainer(context: Context, layoutContainer: PanelLayoutContainer) {
-        presenter.onViewAttach(this)
-
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         listener = null
-        presenter.onViewDetach()
     }
 
     override fun onResume() {

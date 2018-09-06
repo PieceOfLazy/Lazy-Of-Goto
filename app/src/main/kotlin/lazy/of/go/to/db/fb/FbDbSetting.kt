@@ -6,7 +6,7 @@ import com.google.firebase.firestore.GeoPoint
 import io.reactivex.Observable
 import lazy.of.go.to.common.StringUtil
 import lazy.of.go.to.db.data.SettingData
-import lazy.of.go.to.domain.EntityMapper
+import lazy.of.go.to.db.mapper.EntityMapper
 import lazy.of.go.to.domain.data.DbSetting
 import lazy.of.go.to.domain.entity.LocationEntity
 import lazy.of.go.to.domain.entity.SettingEntity

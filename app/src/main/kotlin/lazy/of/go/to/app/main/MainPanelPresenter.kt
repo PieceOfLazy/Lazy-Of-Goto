@@ -1,17 +1,24 @@
 package lazy.of.go.to.app.main
 
+import lazy.of.go.to.base.feature.LoadingFeature
 import lazy.of.go.to.common.Log
-import lazy.of.go.to.domain.data.DbUser
+import lazy.of.go.to.domain.data.DbSetting
+import lazy.of.go.to.domain.entity.SettingEntity
+import lazy.of.go.to.domain.entity.SettingReference
+import lazy.of.go.to.domain.usecase.GetSetting
+import lazy.of.go.to.exception.AppException
+import lazy.of.go.to.usecase.UseCase
+import lazy.of.go.to.usecase.UseCaseTransaction
 
 /**
  * @author lazy.of.zpdl
  */
-class MainPanelPresenter constructor(val log: Log): MainPanelContract.Presenter {
-
-    lateinit var dbUser: DbUser
+class MainPanelPresenter constructor(val log: Log, val dbSetting: DbSetting, private val settingReference: SettingReference): MainPanelContract.Presenter {
 
     private var view: MainPanelContract.View? = null
     private var launch = false
+
+    private var settingEntity: SettingEntity? = null
 
     override fun onViewAttach(view: MainPanelContract.View) {
         this.view = view
@@ -25,11 +32,38 @@ class MainPanelPresenter constructor(val log: Log): MainPanelContract.Presenter 
     override fun onLaunch() {
         if(!launch) {
             launch = true
-            loadSettingReferences()
+            load()
         }
     }
 
-    private fun loadSettingReferences() {
+    private fun load() {
+        val useCaseGetSetting = GetSetting(settingReference.settingIdx, dbSetting).apply {
+            setUseCaseCallback(object  : UseCase.UseCaseCallback<SettingEntity> {
+                override fun onSuccess(response: SettingEntity) {
+                    settingEntity = response
+                }
+
+                override fun onError(exception: AppException) {}
+            })
+        }
+
+        UseCaseTransaction().apply {
+            setLoadingFeature { view?.getFeature(LoadingFeature::class) }
+            setUseCaseCallback(object : UseCaseTransaction.Callback {
+                override fun onSuccess() {
+
+                }
+
+                override fun onError(exception: AppException) {
+                    view?.onException(exception)
+                }
+            })
+            addUseCase(useCaseGetSetting)
+            run()
+        }
+    }
+
+//    private fun loadSettingReferences() {
 //        GetSettingReferences(localPreferences.getValue(LocalPreferences.KEY_USER_UUID, ""), dbSettingReference).apply {
 //            setLoadingFeature(getFeature.getFeature(LoadingFeature::class))
 //            setUseCaseCallback(object : UseCase.UseCaseCallback<List<SettingReference>> {
@@ -43,5 +77,5 @@ class MainPanelPresenter constructor(val log: Log): MainPanelContract.Presenter 
 //            })
 //            run()
 //        }
-    }
+//    }
 }

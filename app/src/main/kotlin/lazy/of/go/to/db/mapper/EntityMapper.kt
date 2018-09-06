@@ -1,4 +1,4 @@
-package lazy.of.go.to.domain
+package lazy.of.go.to.db.mapper
 
 interface EntityMapper<F, T> {
     fun fromObject(obj: T): F

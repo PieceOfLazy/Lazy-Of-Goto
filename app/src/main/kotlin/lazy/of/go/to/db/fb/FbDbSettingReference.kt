@@ -7,7 +7,7 @@ import lazy.of.go.to.common.StringUtil
 import lazy.of.go.to.db.DbListener
 import lazy.of.go.to.db.data.SettingReferenceData
 import lazy.of.go.to.domain.data.DbSettingReference
-import lazy.of.go.to.domain.EntityMapper
+import lazy.of.go.to.db.mapper.EntityMapper
 import lazy.of.go.to.domain.entity.SettingEntity
 import lazy.of.go.to.domain.entity.SettingReference
 import lazy.of.go.to.exception.AppException
@@ -54,7 +54,7 @@ class FbDbSettingReference constructor(private val db: FirebaseFirestore, privat
             var recordIdx = settingReference.recordIdx
 
             if(StringUtil.isEmpty(recordIdx)) {
-                val documentReference = FbDbRecords.getDocument(db)
+                val documentReference = RecordsDb.getDocument(db)
 //                    batch.set(documentReference, "")
                 recordIdx = documentReference.id
             }

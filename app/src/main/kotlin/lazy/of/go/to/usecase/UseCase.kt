@@ -28,10 +28,14 @@ abstract class UseCase<Q, P> constructor(private val request: Q) {
 
     protected fun success(response: P) {
         useCaseCallback?.onSuccess(response)
+        transactionCallBack?.onSuccess()
+        removeUseCaseCallback()
     }
 
     protected fun error(throwable: Throwable) {
         useCaseCallback?.onError(throwable as? AppException ?: AppException(AppExceptionCode.UNKNOWN))
+        transactionCallBack?.onError(throwable as? AppException ?: AppException(AppExceptionCode.UNKNOWN))
+        removeUseCaseCallback()
     }
 
     fun run() {
@@ -40,12 +44,19 @@ abstract class UseCase<Q, P> constructor(private val request: Q) {
 
     protected abstract fun executeUseCase(request: Q)
 
+    private var transactionCallBack: UseCaseTransaction.Callback? = null
+
+    internal fun setTransactionCallBack(callback: UseCaseTransaction.Callback) {
+        transactionCallBack = callback
+    }
+
+    internal fun removeUseCaseCallback() {
+        useCaseCallback = null
+        transactionCallBack = null
+    }
+
     interface UseCaseCallback<R> {
         fun onSuccess(response: R)
         fun onError(exception: AppException)
-    }
-
-    interface UseCaseLoadingFeatureCallback {
-        fun getLoadingFeature(): LoadingFeature?
     }
 }
