@@ -116,7 +116,7 @@ class FbDbSettingReference constructor(private val db: FirebaseFirestore, privat
     }
 
     private fun getCollectionPath(userUUID: String): String {
-        return "${FbDbUser.DB_NAME}/$userUUID/${FbDbSettingReference.DB_NAME}"
+        return "${UserDb.DB_NAME}/$userUUID/${FbDbSettingReference.DB_NAME}"
     }
 
 //    private fun getRecordIdx(idx: String): String {

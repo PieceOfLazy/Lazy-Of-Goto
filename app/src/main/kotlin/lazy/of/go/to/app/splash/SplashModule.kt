@@ -4,14 +4,12 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.android.ContributesAndroidInjector
-import lazy.of.go.to.app.main.MainActivity
 import lazy.of.go.to.base.feature.GetFeature
-import lazy.of.go.to.base.feature.LoadingFeature
 import lazy.of.go.to.common.Log
 import lazy.of.go.to.db.DbInjection
 import lazy.of.go.to.di.ActivityScoped
 import lazy.of.go.to.di.FragmentScoped
-import lazy.of.go.to.domain.data.DbUser
+import lazy.of.go.to.domain.data.UserRepository
 
 /**
  * @author piece.of.lazy
@@ -40,7 +38,7 @@ abstract class SplashModule {
         @JvmStatic
         @ActivityScoped
         @Provides
-        internal fun provideDbUser(dbInjection: DbInjection) = dbInjection.getDB(DbUser::class)
+        internal fun provideDbUser(dbInjection: DbInjection) = dbInjection.getDB(UserRepository::class)
 
         @JvmStatic
         @ActivityScoped

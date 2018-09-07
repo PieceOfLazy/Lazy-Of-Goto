@@ -10,8 +10,8 @@ import lazy.of.go.to.auth.firebase.FbAuth
 import lazy.of.go.to.base.BaseActivity
 import lazy.of.go.to.base.feature.LoadingFeature
 import lazy.of.go.to.common.LocalPreferences
-import lazy.of.go.to.domain.data.DbUser
-import lazy.of.go.to.domain.entity.User
+import lazy.of.go.to.domain.data.UserRepository
+import lazy.of.go.to.domain.entity.UserEntity
 import lazy.of.go.to.domain.usecase.SetUser
 import lazy.of.go.to.exception.AppException
 import lazy.of.go.to.usecase.UseCase
@@ -26,7 +26,7 @@ class LoginActivity: BaseActivity() {
     @Inject
     lateinit var localPreferences: LocalPreferences
     @Inject
-    lateinit var dbUser: DbUser
+    lateinit var dbUser: UserRepository
 
     private var view: LoginView? = LoginView(log, object : LoginView.OnPanelListener {
         override fun onAnonymouslyLogin() {
@@ -96,8 +96,8 @@ class LoginActivity: BaseActivity() {
             setLoadingFeature {
                 getFeature(LoadingFeature::class)
             }
-            setUseCaseCallback(object : UseCase.UseCaseCallback<User> {
-                override fun onSuccess(response: User) {
+            setUseCaseCallback(object : UseCase.UseCaseCallback<UserEntity> {
+                override fun onSuccess(response: UserEntity) {
                     showToast("로그인에 성공하였습니다.")
 
                     val intent = Intent(this@LoginActivity, MainActivity::class.java)

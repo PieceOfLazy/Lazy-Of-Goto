@@ -4,8 +4,8 @@ import lazy.of.go.to.auth.LazyAuth
 import lazy.of.go.to.base.feature.GetFeature
 import lazy.of.go.to.common.Log
 import lazy.of.go.to.di.ActivityScoped
-import lazy.of.go.to.domain.data.DbUser
-import lazy.of.go.to.domain.entity.User
+import lazy.of.go.to.domain.data.UserRepository
+import lazy.of.go.to.domain.entity.UserEntity
 import lazy.of.go.to.domain.usecase.SetUser
 import lazy.of.go.to.exception.AppException
 import lazy.of.go.to.usecase.UseCase
@@ -23,12 +23,12 @@ class SplashPresenter @Inject constructor(): SplashContract.Presenter {
     @Inject
     lateinit var auth: LazyAuth
     @Inject
-    lateinit var dbUser: DbUser
+    lateinit var dbUser: UserRepository
 
     private var view: SplashContract.View? = null
     private var launch = false
 
-    private var user: User? = null
+    private var user: UserEntity? = null
 
     private var taskOffDbUser = false
     private var taskOffAnimation = false
@@ -47,8 +47,8 @@ class SplashPresenter @Inject constructor(): SplashContract.Presenter {
             launch = true
             auth.currentUser()?.let {
                 SetUser(it, dbUser).apply {
-                    setUseCaseCallback(object : UseCase.UseCaseCallback<User> {
-                        override fun onSuccess(response: User) {
+                    setUseCaseCallback(object : UseCase.UseCaseCallback<UserEntity> {
+                        override fun onSuccess(response: UserEntity) {
                             this@SplashPresenter.user = response
                             taskOffDbUser = true
                             taskOff()

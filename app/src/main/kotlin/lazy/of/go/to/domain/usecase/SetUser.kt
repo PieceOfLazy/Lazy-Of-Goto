@@ -3,18 +3,18 @@ package lazy.of.go.to.domain.usecase
 import io.reactivex.disposables.Disposable
 import lazy.of.framework.library.util.Log
 import lazy.of.go.to.auth.AuthUser
-import lazy.of.go.to.domain.data.DbUser
-import lazy.of.go.to.domain.entity.User
+import lazy.of.go.to.domain.data.UserRepository
+import lazy.of.go.to.domain.entity.UserEntity
 import lazy.of.go.to.usecase.UseCase
 
-class SetUser constructor(request: AuthUser, private val dbUser: DbUser): UseCase<AuthUser, User>(request) {
+class SetUser constructor(request: AuthUser, private val dbUser: UserRepository): UseCase<AuthUser, UserEntity>(request) {
 
     private var observable : Disposable? = null
 
     override fun executeUseCase(request: AuthUser) {
         getLoadingFeature()?.loadingStart()
         observable = dbUser.set(
-                User(
+                UserEntity(
                         request.isAnonymous,
                         request.providerId,
                         request.displayName ?: "",

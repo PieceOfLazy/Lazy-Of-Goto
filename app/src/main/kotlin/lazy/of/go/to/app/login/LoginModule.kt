@@ -4,7 +4,7 @@ import dagger.Module
 import dagger.Provides
 import lazy.of.go.to.db.DbInjection
 import lazy.of.go.to.di.ActivityScoped
-import lazy.of.go.to.domain.data.DbUser
+import lazy.of.go.to.domain.data.UserRepository
 
 /**
  * @author piece.of.lazy
@@ -16,6 +16,6 @@ abstract class LoginModule {
         @JvmStatic
         @ActivityScoped
         @Provides
-        internal fun provideDbUser(dbInjection: DbInjection) = dbInjection.getDB(DbUser::class)
+        internal fun provideDbUser(dbInjection: DbInjection) = dbInjection.getDB(UserRepository::class)
     }
 }

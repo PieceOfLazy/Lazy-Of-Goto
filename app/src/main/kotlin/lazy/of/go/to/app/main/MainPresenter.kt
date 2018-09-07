@@ -5,7 +5,7 @@ import lazy.of.go.to.common.LocalPreferences
 import lazy.of.go.to.common.Log
 import lazy.of.go.to.di.ActivityScoped
 import lazy.of.go.to.domain.data.DbSettingReference
-import lazy.of.go.to.domain.data.DbUser
+import lazy.of.go.to.domain.data.UserRepository
 import lazy.of.go.to.domain.entity.SettingReference
 import lazy.of.go.to.domain.usecase.GetSettingReferences
 import lazy.of.go.to.exception.AppException
@@ -22,7 +22,7 @@ class MainPresenter @Inject constructor(): MainContract.Presenter {
     @Inject
     lateinit var log: Log
     @Inject
-    lateinit var dbUser: DbUser
+    lateinit var dbUser: UserRepository
     @Inject
     lateinit var dbSettingReference: DbSettingReference
 

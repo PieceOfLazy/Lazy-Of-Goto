@@ -10,7 +10,7 @@ import lazy.of.go.to.db.DbInjection
 import lazy.of.go.to.di.ActivityScoped
 import lazy.of.go.to.di.FragmentScoped
 import lazy.of.go.to.domain.data.DbSettingReference
-import lazy.of.go.to.domain.data.DbUser
+import lazy.of.go.to.domain.data.UserRepository
 
 /**
  * @author piece.of.lazy
@@ -40,7 +40,7 @@ abstract class MainModule {
         @JvmStatic
         @ActivityScoped
         @Provides
-        internal fun provideDbUser(dbInjection: DbInjection) = dbInjection.getDB(DbUser::class)
+        internal fun provideDbUser(dbInjection: DbInjection) = dbInjection.getDB(UserRepository::class)
 
         @JvmStatic
         @ActivityScoped
