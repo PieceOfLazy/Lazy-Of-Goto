@@ -4,10 +4,10 @@ import lazy.of.go.to.base.feature.LoadingFeature
 import lazy.of.go.to.common.LocalPreferences
 import lazy.of.go.to.common.Log
 import lazy.of.go.to.di.ActivityScoped
-import lazy.of.go.to.domain.data.DbSettingReference
+import lazy.of.go.to.domain.data.SettingRefRep
 import lazy.of.go.to.domain.data.UserRepository
-import lazy.of.go.to.domain.entity.SettingReference
-import lazy.of.go.to.domain.usecase.GetSettingReferences
+import lazy.of.go.to.domain.entity.SettingRefEntity
+import lazy.of.go.to.domain.usecase.GetSettingRef
 import lazy.of.go.to.exception.AppException
 import lazy.of.go.to.usecase.UseCase
 import javax.inject.Inject
@@ -24,7 +24,7 @@ class MainPresenter @Inject constructor(): MainContract.Presenter {
     @Inject
     lateinit var dbUser: UserRepository
     @Inject
-    lateinit var dbSettingReference: DbSettingReference
+    lateinit var settingRefRep: SettingRefRep
 
     private var view: MainContract.View? = null
     private var launch = false
@@ -46,10 +46,10 @@ class MainPresenter @Inject constructor(): MainContract.Presenter {
     }
 
     private fun loadSettingReferences() {
-        GetSettingReferences(localPreferences.getValue(LocalPreferences.KEY_USER_UUID, ""), dbSettingReference).apply {
+        GetSettingRef(localPreferences.getValue(LocalPreferences.KEY_USER_UUID, ""), settingRefRep).apply {
             setLoadingFeature{view?.getFeature(LoadingFeature::class)}
-            setUseCaseCallback(object : UseCase.UseCaseCallback<List<SettingReference>> {
-                override fun onSuccess(response: List<SettingReference>) {
+            setUseCaseCallback(object : UseCase.UseCaseCallback<List<SettingRefEntity>> {
+                override fun onSuccess(response: List<SettingRefEntity>) {
                     view?.onLaunch(response)
                 }
 

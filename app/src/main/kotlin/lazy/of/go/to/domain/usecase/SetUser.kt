@@ -7,13 +7,13 @@ import lazy.of.go.to.domain.data.UserRepository
 import lazy.of.go.to.domain.entity.UserEntity
 import lazy.of.go.to.usecase.UseCase
 
-class SetUser constructor(request: AuthUser, private val dbUser: UserRepository): UseCase<AuthUser, UserEntity>(request) {
+class SetUser constructor(request: AuthUser, private val userRep: UserRepository): UseCase<AuthUser, UserEntity>(request) {
 
     private var observable : Disposable? = null
 
     override fun executeUseCase(request: AuthUser) {
         getLoadingFeature()?.loadingStart()
-        observable = dbUser.set(
+        observable = userRep.set(
                 UserEntity(
                         request.isAnonymous,
                         request.providerId,
@@ -21,18 +21,18 @@ class SetUser constructor(request: AuthUser, private val dbUser: UserRepository)
                         request.email ?: "",
                         request.photoURL?.toString() ?: "")
         ).map {
-            dbUser.getUser()
-        }.subscribe({
+            userRep.getUser()
+        }.subscribe({ userEntity ->
             observable?.let {
                 Log.d("SetUser", "AuthUser : subscribe onNext : ${it.isDisposed}")
             }
-            success(it)
+            success(userEntity)
             getLoadingFeature()?.loadingEnd()
-        }, {
+        }, { throwable ->
             observable?.let {
                 Log.d("SetUser", "AuthUser : subscribe onError : ${it.isDisposed}")
             }
-            error(it)
+            error(throwable)
             getLoadingFeature()?.loadingEnd()
         }, {
             observable?.let {

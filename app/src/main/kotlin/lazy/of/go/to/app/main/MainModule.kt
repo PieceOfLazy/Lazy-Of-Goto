@@ -9,7 +9,7 @@ import lazy.of.go.to.common.Log
 import lazy.of.go.to.db.DbInjection
 import lazy.of.go.to.di.ActivityScoped
 import lazy.of.go.to.di.FragmentScoped
-import lazy.of.go.to.domain.data.DbSettingReference
+import lazy.of.go.to.domain.data.SettingRefRep
 import lazy.of.go.to.domain.data.UserRepository
 
 /**
@@ -45,6 +45,6 @@ abstract class MainModule {
         @JvmStatic
         @ActivityScoped
         @Provides
-        internal fun provideSettingReference(dbInjection: DbInjection) = dbInjection.getDB(DbSettingReference::class)
+        internal fun provideSettingReference(dbInjection: DbInjection) = dbInjection.getDB(SettingRefRep::class)
     }
 }

@@ -13,7 +13,7 @@ import lazy.of.go.to.R
 import lazy.of.go.to.base.MvpFragment
 import lazy.of.go.to.db.DbInjection
 import lazy.of.go.to.di.ActivityScoped
-import lazy.of.go.to.domain.entity.SettingReference
+import lazy.of.go.to.domain.entity.SettingRefEntity
 import javax.inject.Inject
 
 /**
@@ -71,7 +71,7 @@ class MainFragment @Inject constructor(): MvpFragment<MainContract.View, MainCon
         adapter?.destroy()
     }
 
-    override fun onLaunch(list: List<SettingReference>) {
+    override fun onLaunch(list: List<SettingRefEntity>) {
         val panels = mutableListOf<PanelBase>()
         for(settingReference in list) {
             panels.add(MainPanel(this, log, dbInjection, settingReference))

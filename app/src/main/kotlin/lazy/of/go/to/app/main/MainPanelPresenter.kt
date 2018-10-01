@@ -2,9 +2,9 @@ package lazy.of.go.to.app.main
 
 import lazy.of.go.to.base.feature.LoadingFeature
 import lazy.of.go.to.common.Log
-import lazy.of.go.to.domain.data.DbSetting
+import lazy.of.go.to.domain.data.SettingRep
 import lazy.of.go.to.domain.entity.SettingEntity
-import lazy.of.go.to.domain.entity.SettingReference
+import lazy.of.go.to.domain.entity.SettingRefEntity
 import lazy.of.go.to.domain.usecase.GetSetting
 import lazy.of.go.to.exception.AppException
 import lazy.of.go.to.usecase.UseCase
@@ -13,7 +13,7 @@ import lazy.of.go.to.usecase.UseCaseTransaction
 /**
  * @author lazy.of.zpdl
  */
-class MainPanelPresenter constructor(val log: Log, val dbSetting: DbSetting, private val settingReference: SettingReference): MainPanelContract.Presenter {
+class MainPanelPresenter constructor(val log: Log, val dbSetting: SettingRep, private val settingReference: SettingRefEntity): MainPanelContract.Presenter {
 
     private var view: MainPanelContract.View? = null
     private var launch = false

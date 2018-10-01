@@ -11,7 +11,7 @@ import lazy.of.go.to.db.data.RecordDbData
 import lazy.of.go.to.db.mapper.EntityMapper
 import lazy.of.go.to.db.mapper.LocationMapper
 import lazy.of.go.to.db.mapper.RecordTimeMapper
-import lazy.of.go.to.domain.data.RecordRepository
+import lazy.of.go.to.domain.data.RecordsRep
 import lazy.of.go.to.domain.entity.EntitySet
 import lazy.of.go.to.domain.entity.RecordEntity
 import lazy.of.go.to.exception.AppException
@@ -19,7 +19,7 @@ import lazy.of.go.to.exception.AppExceptionCode
 import java.util.*
 
 
-class RecordsDb constructor(private val db: FirebaseFirestore) : RecordRepository {
+class RecordsDb constructor(private val db: FirebaseFirestore) : RecordsRep {
 
     companion object {
         private const val DB_NAME = "Records"
@@ -27,7 +27,7 @@ class RecordsDb constructor(private val db: FirebaseFirestore) : RecordRepositor
 
         fun getIdx(db: FirebaseFirestore, idx: String): String {
             return if (StringUtil.isEmpty(idx)) {
-                db.collection(FbDbSetting.DB_NAME).document().id
+                db.collection(SettingDb.DB_NAME).document().id
             } else {
                 idx
             }

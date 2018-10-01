@@ -2,11 +2,11 @@ package lazy.of.go.to.db
 
 import com.google.firebase.firestore.FirebaseFirestore
 import lazy.of.go.to.common.LocalPreferences
-import lazy.of.go.to.db.fb.FbDbSetting
-import lazy.of.go.to.db.fb.FbDbSettingReference
+import lazy.of.go.to.db.fb.SettingDb
+import lazy.of.go.to.db.fb.SettingRefDb
 import lazy.of.go.to.db.fb.UserDb
-import lazy.of.go.to.domain.data.DbSetting
-import lazy.of.go.to.domain.data.DbSettingReference
+import lazy.of.go.to.domain.data.SettingRefRep
+import lazy.of.go.to.domain.data.SettingRep
 import lazy.of.go.to.domain.data.UserRepository
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -28,16 +28,16 @@ class DbInjection @Inject constructor() {
         })
     }
 
-    private val fbDbSettingReference: FbDbSettingReference by lazy {
-        FbDbSettingReference(db, object : DbListener {
+    private val fbDbSettingReference: SettingRefDb by lazy {
+        SettingRefDb(db, object : DbListener {
             override fun getUserUUID(): String {
                 return localPreferences.getValue(LocalPreferences.KEY_USER_UUID, "")
             }
         })
     }
 
-    private val fbDbSetting: FbDbSetting by lazy {
-        FbDbSetting(db)
+    private val fbDbSetting: SettingDb by lazy {
+        SettingDb(db)
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -46,10 +46,10 @@ class DbInjection @Inject constructor() {
             UserRepository::class -> {
                 return fbDbUser as T
             }
-            DbSettingReference::class -> {
+            SettingRefRep::class -> {
                 return fbDbSettingReference as T
             }
-            DbSetting::class -> {
+            SettingRep::class -> {
                 return fbDbSetting as T
             }
         }

@@ -8,18 +8,18 @@ import lazy.of.go.to.common.StringUtil
 import lazy.of.go.to.db.data.SettingDbData
 import lazy.of.go.to.db.mapper.EntityMapper
 import lazy.of.go.to.db.mapper.SettingTimeMapper
-import lazy.of.go.to.domain.data.DbSetting
+import lazy.of.go.to.domain.data.SettingRep
 import lazy.of.go.to.domain.entity.LocationEntity
 import lazy.of.go.to.domain.entity.SettingEntity
 import lazy.of.go.to.exception.AppException
 import lazy.of.go.to.exception.AppExceptionCode
 
 
-class FbDbSetting constructor(private val db: FirebaseFirestore): DbSetting {
+class SettingDb constructor(private val db: FirebaseFirestore): SettingRep {
     companion object {
         const val DB_NAME = "Setting"
 
-        fun getIdx(db: FirebaseFirestore, idx: String): String {
+        fun getIdx(db: FirebaseFirestore, idx: String = ""): String {
             return if (StringUtil.isEmpty(idx)) {
                 db.collection(DB_NAME).document().id
             } else {

@@ -2,7 +2,7 @@ package lazy.of.go.to.app.main
 
 import lazy.of.go.to.base.MvpPresenter
 import lazy.of.go.to.base.MvpView
-import lazy.of.go.to.domain.entity.SettingReference
+import lazy.of.go.to.domain.entity.SettingRefEntity
 
 
 /**
@@ -11,7 +11,7 @@ import lazy.of.go.to.domain.entity.SettingReference
 interface MainPanelContract {
 
     interface View: MvpView<Presenter> {
-        fun onLaunch(list: List<SettingReference>)
+        fun onLaunch(list: List<SettingRefEntity>)
     }
 
     interface Presenter: MvpPresenter<View> {

@@ -7,23 +7,23 @@ import lazy.of.go.to.base.MvpPanel
 import lazy.of.go.to.base.MvpView
 import lazy.of.go.to.common.Log
 import lazy.of.go.to.db.DbInjection
-import lazy.of.go.to.domain.data.DbSetting
-import lazy.of.go.to.domain.entity.SettingReference
+import lazy.of.go.to.domain.data.SettingRep
+import lazy.of.go.to.domain.entity.SettingRefEntity
 
 /**
  * @author lazy.of.zpdl
  */
-class MainPanel constructor(mvpView: MvpView<*>, log: Log, dbInjection: DbInjection, settingReference: SettingReference, private var listener: OnPanelListener? = null):
+class MainPanel constructor(mvpView: MvpView<*>, log: Log, dbInjection: DbInjection, settingReference: SettingRefEntity, private var listener: OnPanelListener? = null):
         MvpPanel<MainPanelContract.View, MainPanelContract.Presenter>(mvpView, log, dbInjection), MainPanelContract.View {
 
-    override fun onLaunch(list: List<SettingReference>) {
+    override fun onLaunch(list: List<SettingRefEntity>) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     interface OnPanelListener {
     }
 
-    override val presenter: MainPanelContract.Presenter = MainPanelPresenter(log, dbInjection.getDB(DbSetting::class), settingReference)
+    override val presenter: MainPanelContract.Presenter = MainPanelPresenter(log, dbInjection.getDB(SettingRep::class), settingReference)
 
     override fun onBindPresenterView(): MainPanelContract.View = this
 

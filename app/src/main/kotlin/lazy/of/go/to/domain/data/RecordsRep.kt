@@ -5,7 +5,7 @@ import lazy.of.go.to.domain.entity.EntitySet
 import lazy.of.go.to.domain.entity.RecordEntity
 import java.util.*
 
-interface RecordRepository {
+interface RecordsRep {
     fun set(idx: String, entity: RecordEntity): Observable<Unit>
 
     fun get(idx: String, date: Date): Observable<EntitySet<RecordEntity>>
